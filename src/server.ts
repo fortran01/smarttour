@@ -32,7 +32,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
       {
-        name: "read_file",
+        name: "say_hello",
         description:
           "A simple hello world tool that requires no input and always returns 'Hello World!'",
         inputSchema: zodToJsonSchema(ReadFileArgsSchema),
@@ -45,10 +45,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     const { name, arguments: args } = request.params;
     switch (name) {
-      case "read_file": {
+      case "say_hello": {
         const parsed = ReadFileArgsSchema.safeParse(args);
         if (!parsed.success) {
-          throw new Error(`Invalid arguments for read_file: ${parsed.error}`);
+          throw new Error(`Invalid arguments for say_hello: ${parsed.error}`);
         }
         return {
           content: [{ type: "text", text: "Hello World!" }],

@@ -21,7 +21,7 @@
     "start": "ts-node src/server.ts",
     "build": "tsc",
     "serve": "node dist/server.js",
-    "docker:build": "docker build -t smarttour-mcp .",
-    "docker:run": "docker run -i smarttour-mcp"
+    "docker:build": "docker build -t mcp/smarttour .",
+    "docker:run": "docker run -i mcp/smarttour"
   }
 }

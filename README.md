@@ -86,3 +86,11 @@ This will display:
   - Whether it has forecasting enabled
   - Last forecast update time
   - Venue ID
+
+### Running in MCP Inspector
+
+To test the MCP server functionality using the MCP Inspector:
+
+```bash
+npx @modelcontextprotocol/inspector npx tsx src/server.ts
+```
