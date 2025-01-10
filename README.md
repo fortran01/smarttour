@@ -35,6 +35,10 @@ SmartTour creates intelligent itineraries by:
 
 - [ ] Claude-generated itinerary recommendations
 
+### Limitations
+
+- No access to TomTom Traffic Stats API, so we'll use TomTom's Routing API to get traffic data. Not sure if the Routing API accounts for historical traffic data.
+
 ## Tech Stack
 
 - TypeScript for type-safe development

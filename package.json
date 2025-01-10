@@ -18,6 +18,7 @@
   "scripts": {
     "prefetch": "bun run src/scripts/prefetchAttractions.ts",
     "test:venues": "bun run src/scripts/testVenueFetching.ts",
+    "test:routes": "bun run src/scripts/testRouting.ts",
     "start": "ts-node src/server.ts",
     "build": "tsc",
     "serve": "node dist/server.js",
