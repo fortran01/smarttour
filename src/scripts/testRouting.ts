@@ -36,6 +36,45 @@ interface RouteResponse {
   }>;
 }
 
+interface RouteOptions {
+  departAt?: string;
+  arriveAt?: string;
+}
+
+function parseArgs(): RouteOptions {
+  const args = process.argv.slice(2);
+  const options: RouteOptions = {};
+
+  for (let i = 0; i < args.length; i++) {
+    switch (args[i]) {
+      case '--depart-at':
+        options.departAt = args[++i];
+        break;
+      case '--arrive-at':
+        options.arriveAt = args[++i];
+        break;
+    }
+  }
+
+  if (options.departAt && options.arriveAt) {
+    console.error('Error: Cannot specify both --depart-at and --arrive-at');
+    process.exit(1);
+  }
+
+  // Validate time format (YYYY-MM-DDThh:mm:ss)
+  const timeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
+  if (options.departAt && !timeRegex.test(options.departAt)) {
+    console.error('Error: --depart-at must be in format YYYY-MM-DDThh:mm:ss');
+    process.exit(1);
+  }
+  if (options.arriveAt && !timeRegex.test(options.arriveAt)) {
+    console.error('Error: --arrive-at must be in format YYYY-MM-DDThh:mm:ss');
+    process.exit(1);
+  }
+
+  return options;
+}
+
 async function loadVenueLocations(): Promise<VenueLocation[]> {
   const venues: VenueLocation[] = [];
   const dataDir = join(process.cwd(), 'data');
@@ -67,22 +106,30 @@ async function loadVenueLocations(): Promise<VenueLocation[]> {
   }
 }
 
-async function calculateRoute(origin: VenueLocation, destination: VenueLocation) {
+async function calculateRoute(origin: VenueLocation, destination: VenueLocation, options: RouteOptions = {}) {
   const baseUrl = 'https://api.tomtom.com/routing/1/calculateRoute';
   const locations = `${origin.lat},${origin.lon}:${destination.lat},${destination.lon}`;
   
   // Build URL with common parameters
   const url = new URL(`${baseUrl}/${locations}/json`);
-  const params = {
-    key: API_KEY as string, // Type assertion since we checked it's not null above
-    routeType: 'eco', // Can be: fastest, shortest, eco, thrilling
+  const params: Record<string, string> = {
+    key: API_KEY as string,
+    routeType: 'fastest',
     traffic: 'true',
     travelMode: 'car',
     avoid: 'unpavedRoads',
-    sectionType: 'traffic', // Include traffic information in response
-    report: 'effectiveSettings', // Include route calculation settings in response
-    computeTravelTimeFor: 'all' // Calculate travel times for all traffic conditions
+    sectionType: 'traffic',
+    report: 'effectiveSettings',
+    computeTravelTimeFor: 'all'
   };
+
+  // Add timing parameters if specified
+  if (options.departAt) {
+    params.departAt = options.departAt;
+  }
+  if (options.arriveAt) {
+    params.arriveAt = options.arriveAt;
+  }
 
   // Add query parameters to URL
   Object.entries(params).forEach(([key, value]) => {
@@ -93,6 +140,12 @@ async function calculateRoute(origin: VenueLocation, destination: VenueLocation)
     console.log(`\nCalculating route from ${origin.name} to ${destination.name}...`);
     console.log(`From: (${origin.lat}, ${origin.lon})`);
     console.log(`To: (${destination.lat}, ${destination.lon})`);
+    if (options.departAt) {
+      console.log(`Departure Time: ${options.departAt}`);
+    }
+    if (options.arriveAt) {
+      console.log(`Arrival Time: ${options.arriveAt}`);
+    }
     console.log(`Request URL: ${url}`);
 
     const response = await fetch(url);
@@ -129,6 +182,9 @@ async function calculateRoute(origin: VenueLocation, destination: VenueLocation)
 
 async function main() {
   console.log('Starting TomTom Routing API test...');
+  
+  // Parse command line arguments
+  const options = parseArgs();
 
   // Create routes directory if it doesn't exist
   const routesDir = join(process.cwd(), 'data', 'routes');
@@ -140,13 +196,30 @@ async function main() {
     return;
   }
 
-  // Calculate route from CN Tower to Casa Loma
-  await calculateRoute(venues[0], venues[1]);
+  // Calculate route from CN Tower to Casa Loma with timing options
+  await calculateRoute(venues[0], venues[1], options);
   
-  // Calculate reverse route (Casa Loma to CN Tower)
-  await calculateRoute(venues[1], venues[0]);
+  // Calculate reverse route (Casa Loma to CN Tower) with timing options
+  await calculateRoute(venues[1], venues[0], options);
 
   console.log('\nFinished calculating routes!');
+}
+
+// Print usage if --help is specified
+if (process.argv.includes('--help')) {
+  console.log(`
+Usage: bun run test:routes [options]
+
+Options:
+  --depart-at <time>  Specify departure time (format: YYYY-MM-DDThh:mm:ss)
+  --arrive-at <time>  Specify arrival time (format: YYYY-MM-DDThh:mm:ss)
+  --help              Show this help message
+
+Examples:
+  bun run test:routes --depart-at 2024-01-20T09:00:00
+  bun run test:routes --arrive-at 2024-01-20T17:30:00
+`);
+  process.exit(0);
 }
 
 main().catch(console.error); 

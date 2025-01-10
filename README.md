@@ -34,6 +34,7 @@ SmartTour creates intelligent itineraries by:
 ### User Interface
 
 - [ ] Claude-generated itinerary recommendations
+- [ ] Include peak days and times to avoid in each location
 
 ### Limitations
 
@@ -90,6 +91,31 @@ This will display:
   - Whether it has forecasting enabled
   - Last forecast update time
   - Venue ID
+
+### Testing Routes with Timing
+
+To test routes between attractions with specific timing options:
+
+```bash
+# Set up your TomTom API key in .env:
+TOMTOM_API_KEY=your_api_key_here
+
+# Run the routing test with different options:
+bun run test:routes                                    # Current traffic conditions
+bun run test:routes --depart-at 2024-01-20T09:00:00   # Specific departure time
+bun run test:routes --arrive-at 2024-01-20T17:30:00   # Specific arrival time
+bun run test:routes --help                            # Show usage information
+```
+
+The script will:
+
+- Calculate routes between CN Tower and Casa Loma in both directions
+- Include real-time traffic information
+- Save detailed route data to `data/routes/`
+- Display a summary with:
+  - Distance in kilometers
+  - Estimated travel time
+  - Expected traffic delays
 
 ### Running in MCP Inspector
 
