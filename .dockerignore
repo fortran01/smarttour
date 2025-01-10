@@ -6,5 +6,4 @@ dist
 .gitignore
 .vscode
 *.md
-data/
 .cursor* 

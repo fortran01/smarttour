@@ -14,8 +14,8 @@ SmartTour creates intelligent itineraries by:
 
 ### Core Features (MVP)
 
-- [ ] MCP server implementation for data source integration
-- [ ] Historical data connectors for BestTime.app and TomTom Traffic Stats
+- [x] MCP server implementation for historical data source integration with BestTime.app
+- [ ] MCP server implementation for real-time data source integration with TomTom Traffic Stats
 - [ ] Claude-powered itinerary optimization engine
 - [ ] Support for major Toronto attractions (initial test case)
 - [x] Prefetch Toronto attractions using BestTime.app's New Foot Traffic Forecast API endpoint (`/api/v1/forecasts`):
