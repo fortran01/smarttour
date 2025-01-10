@@ -15,9 +15,9 @@ SmartTour creates intelligent itineraries by:
 ### Core Features (MVP)
 
 - [x] MCP server implementation for historical data source integration with BestTime.app
-- [ ] MCP server implementation for real-time data source integration with TomTom Traffic Stats
-- [ ] Claude-powered itinerary optimization engine
-- [ ] Support for major Toronto attractions (initial test case)
+- [x] MCP server implementation for real-time data source integration with TomTom Traffic Stats
+- [x] Claude-powered itinerary optimization engine
+- [x] Support for major Toronto attractions (initial test case)
 - [x] Prefetch Toronto attractions using BestTime.app's New Foot Traffic Forecast API endpoint (`/api/v1/forecasts`):
   - CN Tower
   - Royal Ontario Museum (ROM)
@@ -33,8 +33,7 @@ SmartTour creates intelligent itineraries by:
 
 ### User Interface
 
-- [ ] Claude-generated itinerary recommendations
-- [ ] Include peak days and times to avoid in each location
+- [x] Claude-generated itinerary recommendations
 
 ### Limitations
 
