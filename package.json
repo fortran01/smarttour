@@ -9,6 +9,7 @@
     "@types/node": "^20.10.5"
   },
   "scripts": {
-    "prefetch": "bun run src/scripts/prefetchAttractions.ts"
+    "prefetch": "bun run src/scripts/prefetchAttractions.ts",
+    "test:venues": "bun run src/scripts/testVenueFetching.ts"
   }
 }

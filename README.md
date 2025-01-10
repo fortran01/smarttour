@@ -29,6 +29,7 @@ SmartTour creates intelligent itineraries by:
   - St. Lawrence Market
   - Toronto Zoo
   - Little Canada
+- [x] Test venue fetching using BestTime.app's Venues API endpoint (`/api/v1/venues`)
 
 ### User Interface
 
@@ -60,7 +61,7 @@ When using BestTime.app's API endpoints for new foot-traffic data, the generated
 - Run the prefetch script:
 
    ```bash
-   bun run src/scripts/prefetchAttractions.ts
+   bun run prefetch
    ```
 
 This will:
@@ -68,3 +69,20 @@ This will:
 - Fetch foot traffic forecasts for all Toronto attractions
 - Store individual attraction data in `data/{attraction_name}.json`
 - Create a combined dataset in `data/all_attractions.json`
+
+### Testing Venue Data
+
+To view all venues currently in your BestTime.app account:
+
+```bash
+bun run test:venues
+```
+
+This will display:
+
+- Total number of venues in your account
+- For each venue:
+  - Name and address
+  - Whether it has forecasting enabled
+  - Last forecast update time
+  - Venue ID
