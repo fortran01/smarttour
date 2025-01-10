@@ -1,0 +1,38 @@
+# Ignore patterns for search
+ignore:
+  - dist/**
+  - node_modules/**
+  - bun.lockb
+
+# Search paths for code navigation
+search_path:
+  - src/**/*.ts
+
+# File associations
+file_associations:
+  "*.ts": "typescript"
+
+# Directory structure tracking
+track_file_structure: true
+structure_file: ".cursor.directory_structure.md"
+
+# README feature list tracking
+track_readme_features: true
+readme_file: "README.md"
+feature_section: "## Features"
+
+# Protected sections in README.md
+protected_sections:
+  - "# SmartTour"
+  - "## Solution Overview"
+
+# Tech stack synchronization
+tech_stack_sync:
+  enabled: true
+  readme_section: "## Tech Stack"
+  update_rules:
+    - when: "typescript"
+      add_search_path: ["src/**/*.ts", "tests/**/*.ts"]
+      add_ignore: ["*.js", "*.js.map"]
+    - when: "node"
+      add_ignore: ["node_modules/**", "npm-debug.log"]

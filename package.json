@@ -1,0 +1,14 @@
+{
+  "name": "smarttour",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5"
+  },
+  "scripts": {
+    "prefetch": "bun run src/scripts/prefetchAttractions.ts"
+  }
+}
