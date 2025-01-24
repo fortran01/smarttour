@@ -1,9 +1,3 @@
-# Ignore patterns for search
-ignore:
-  - dist/**
-  - node_modules/**
-  - bun.lockb
-
 # Search paths for code navigation
 search_path:
   - src/**/*.ts
@@ -36,3 +30,23 @@ tech_stack_sync:
       add_ignore: ["*.js", "*.js.map"]
     - when: "node"
       add_ignore: ["node_modules/**", "npm-debug.log"]
+
+# Git commit message configuration
+git:
+  commit_types:
+    - type: "feat"
+      description: "A new feature"
+    - type: "fix"
+      description: "A bug fix"
+    - type: "docs"
+      description: "Documentation only changes"
+    - type: "style"
+      description: "Changes that do not affect the meaning of the code"
+    - type: "refactor"
+      description: "A code change that neither fixes a bug nor adds a feature"
+    - type: "perf"
+      description: "A code change that improves performance"
+    - type: "test"
+      description: "Adding missing or correcting existing tests"
+    - type: "chore"
+      description: "Changes to build process or auxiliary tools"
