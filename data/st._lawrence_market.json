@@ -1,0 +1,1369 @@
+{
+  "status": "OK",
+  "venue_info": {
+    "venue_id": "ven_6f7343317961386c61625f526b49314c484474646679574a496843",
+    "venue_name": "St. Lawrence Market",
+    "venue_address": "Toronto, ON M5E 1C3 Canada",
+    "venue_address_list": [
+      "Toronto, ON M5E 1C3",
+      "Canada"
+    ],
+    "venue_timezone": "America/Toronto",
+    "venue_dwell_time_min": 25,
+    "venue_dwell_time_max": 300,
+    "venue_dwell_time_avg": 162,
+    "venue_type": "MARKET",
+    "venue_types": [
+      "market",
+      "farmers_market",
+      "fresh_food_market",
+      "historical_landmark",
+      "tourist_attraction"
+    ],
+    "venue_lat": 43.6486879,
+    "venue_lon": -79.3715454
+  },
+  "analysis": [
+    {
+      "day_info": {
+        "day_int": 0,
+        "day_text": "Monday",
+        "venue_open": "Closed",
+        "venue_closed": "Closed",
+        "day_rank_mean": 7,
+        "day_rank_max": 7,
+        "venue_open_close_v2": {
+          "24h": [],
+          "12h": [
+            "Closed"
+          ]
+        }
+      },
+      "busy_hours": [],
+      "quiet_hours": [],
+      "peak_hours": [
+        {
+          "peak_info": "No peaks for today"
+        }
+      ],
+      "surge_hours": {
+        "most_people_come": "N/A",
+        "most_people_leave": "N/A"
+      },
+      "hour_analysis": [
+        {
+          "hour": 6,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 7,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 8,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 9,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 10,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 11,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 12,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 13,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 14,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 15,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 16,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 17,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 18,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 19,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 20,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 21,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 22,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 23,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 0,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 1,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 2,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 3,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 4,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 5,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        }
+      ],
+      "day_raw": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "day_info": {
+        "day_int": 1,
+        "day_text": "Tuesday",
+        "venue_open": 9,
+        "venue_closed": 19,
+        "day_rank_mean": 6,
+        "day_rank_max": 6,
+        "day_mean": 42,
+        "day_max": 53,
+        "venue_open_close_v2": {
+          "24h": [
+            {
+              "opens": 9,
+              "closes": 19
+            }
+          ],
+          "12h": [
+            "9AM–7PM"
+          ]
+        },
+        "note": "Update: venue_open_close_v2 replaces venue_open and venue_closed and supports multiple opening times per day."
+      },
+      "busy_hours": [
+        13,
+        14
+      ],
+      "quiet_hours": [
+        19
+      ],
+      "peak_hours": [
+        {
+          "peak_start": 10,
+          "peak_max": 13,
+          "peak_end": 18,
+          "peak_intensity": 3,
+          "peak_delta_mean_week": 17
+        }
+      ],
+      "surge_hours": {
+        "most_people_come": 9,
+        "most_people_leave": 18
+      },
+      "hour_analysis": [
+        {
+          "hour": 6,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 7,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 8,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 9,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 10,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 11,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 12,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 13,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 14,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 15,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 16,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 17,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 18,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 19,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 20,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 21,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 22,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 23,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 0,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 1,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 2,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 3,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 4,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 5,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        }
+      ],
+      "day_raw": [
+        0,
+        0,
+        0,
+        25,
+        35,
+        40,
+        50,
+        55,
+        55,
+        50,
+        45,
+        40,
+        30,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "day_info": {
+        "day_int": 2,
+        "day_text": "Wednesday",
+        "venue_open": 9,
+        "venue_closed": 19,
+        "day_rank_mean": 6,
+        "day_rank_max": 6,
+        "day_mean": 42,
+        "day_max": 53,
+        "venue_open_close_v2": {
+          "24h": [
+            {
+              "opens": 9,
+              "closes": 19
+            }
+          ],
+          "12h": [
+            "9AM–7PM"
+          ]
+        },
+        "note": "Update: venue_open_close_v2 replaces venue_open and venue_closed and supports multiple opening times per day."
+      },
+      "busy_hours": [
+        13
+      ],
+      "quiet_hours": [
+        19
+      ],
+      "peak_hours": [
+        {
+          "peak_start": 10,
+          "peak_max": 13,
+          "peak_end": 18,
+          "peak_intensity": 3,
+          "peak_delta_mean_week": 17
+        }
+      ],
+      "surge_hours": {
+        "most_people_come": 9,
+        "most_people_leave": 18
+      },
+      "hour_analysis": [
+        {
+          "hour": 6,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 7,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 8,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 9,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 10,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 11,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 12,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 13,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 14,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 15,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 16,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 17,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 18,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 19,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 20,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 21,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 22,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 23,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 0,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 1,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 2,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 3,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 4,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 5,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        }
+      ],
+      "day_raw": [
+        0,
+        0,
+        0,
+        25,
+        30,
+        40,
+        50,
+        55,
+        50,
+        50,
+        45,
+        40,
+        35,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "day_info": {
+        "day_int": 3,
+        "day_text": "Thursday",
+        "venue_open": 9,
+        "venue_closed": 19,
+        "day_rank_mean": 4,
+        "day_rank_max": 4,
+        "day_mean": 45,
+        "day_max": 57,
+        "venue_open_close_v2": {
+          "24h": [
+            {
+              "opens": 9,
+              "closes": 19
+            }
+          ],
+          "12h": [
+            "9AM–7PM"
+          ]
+        },
+        "note": "Update: venue_open_close_v2 replaces venue_open and venue_closed and supports multiple opening times per day."
+      },
+      "busy_hours": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "quiet_hours": [
+        19
+      ],
+      "peak_hours": [
+        {
+          "peak_start": 10,
+          "peak_max": 13,
+          "peak_end": 18,
+          "peak_intensity": 3,
+          "peak_delta_mean_week": 21
+        }
+      ],
+      "surge_hours": {
+        "most_people_come": 9,
+        "most_people_leave": 18
+      },
+      "hour_analysis": [
+        {
+          "hour": 6,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 7,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 8,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 9,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 10,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 11,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 12,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 13,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 14,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 15,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 16,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 17,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 18,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 19,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 20,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 21,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 22,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 23,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 0,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 1,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 2,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 3,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 4,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 5,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        }
+      ],
+      "day_raw": [
+        0,
+        0,
+        0,
+        25,
+        35,
+        45,
+        55,
+        55,
+        55,
+        55,
+        50,
+        45,
+        35,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "day_info": {
+        "day_int": 4,
+        "day_text": "Friday",
+        "venue_open": 9,
+        "venue_closed": 19,
+        "day_rank_mean": 3,
+        "day_rank_max": 4,
+        "day_mean": 46,
+        "day_max": 57,
+        "venue_open_close_v2": {
+          "24h": [
+            {
+              "opens": 9,
+              "closes": 19
+            }
+          ],
+          "12h": [
+            "9AM–7PM"
+          ]
+        },
+        "note": "Update: venue_open_close_v2 replaces venue_open and venue_closed and supports multiple opening times per day."
+      },
+      "busy_hours": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "quiet_hours": [
+        19
+      ],
+      "peak_hours": [
+        {
+          "peak_start": 10,
+          "peak_max": 13,
+          "peak_end": 18,
+          "peak_intensity": 3,
+          "peak_delta_mean_week": 21
+        }
+      ],
+      "surge_hours": {
+        "most_people_come": 9,
+        "most_people_leave": 18
+      },
+      "hour_analysis": [
+        {
+          "hour": 6,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 7,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 8,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 9,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 10,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 11,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 12,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 13,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 14,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 15,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 16,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 17,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 18,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 19,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 20,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 21,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 22,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 23,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 0,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 1,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 2,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 3,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 4,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 5,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        }
+      ],
+      "day_raw": [
+        0,
+        0,
+        0,
+        25,
+        35,
+        45,
+        55,
+        55,
+        55,
+        55,
+        50,
+        45,
+        35,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "day_info": {
+        "day_int": 5,
+        "day_text": "Saturday",
+        "venue_open": 7,
+        "venue_closed": 17,
+        "day_rank_mean": 1,
+        "day_rank_max": 1,
+        "day_mean": 70,
+        "day_max": 100,
+        "venue_open_close_v2": {
+          "24h": [
+            {
+              "opens": 7,
+              "closes": 17
+            }
+          ],
+          "12h": [
+            "7AM–5PM"
+          ]
+        },
+        "note": "Update: venue_open_close_v2 replaces venue_open and venue_closed and supports multiple opening times per day."
+      },
+      "busy_hours": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "quiet_hours": [
+        7,
+        17
+      ],
+      "peak_hours": [
+        {
+          "peak_start": 8,
+          "peak_max": 13,
+          "peak_end": 16,
+          "peak_intensity": 5,
+          "peak_delta_mean_week": 64
+        }
+      ],
+      "surge_hours": {
+        "most_people_come": 6,
+        "most_people_leave": 16
+      },
+      "hour_analysis": [
+        {
+          "hour": 6,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 7,
+          "intensity_txt": "Low",
+          "intensity_nr": -2
+        },
+        {
+          "hour": 8,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 9,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 10,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 11,
+          "intensity_txt": "High",
+          "intensity_nr": 2
+        },
+        {
+          "hour": 12,
+          "intensity_txt": "High",
+          "intensity_nr": 2
+        },
+        {
+          "hour": 13,
+          "intensity_txt": "High",
+          "intensity_nr": 2
+        },
+        {
+          "hour": 14,
+          "intensity_txt": "High",
+          "intensity_nr": 2
+        },
+        {
+          "hour": 15,
+          "intensity_txt": "High",
+          "intensity_nr": 2
+        },
+        {
+          "hour": 16,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 17,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 18,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 19,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 20,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 21,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 22,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 23,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 0,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 1,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 2,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 3,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 4,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 5,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        }
+      ],
+      "day_raw": [
+        0,
+        20,
+        35,
+        50,
+        70,
+        85,
+        95,
+        100,
+        95,
+        80,
+        65,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "day_info": {
+        "day_int": 6,
+        "day_text": "Sunday",
+        "venue_open": 10,
+        "venue_closed": 17,
+        "day_rank_mean": 2,
+        "day_rank_max": 2,
+        "day_mean": 68,
+        "day_max": 83,
+        "venue_open_close_v2": {
+          "24h": [
+            {
+              "opens": 10,
+              "closes": 17
+            }
+          ],
+          "12h": [
+            "10AM–5PM"
+          ]
+        },
+        "note": "Update: venue_open_close_v2 replaces venue_open and venue_closed and supports multiple opening times per day."
+      },
+      "busy_hours": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "quiet_hours": [
+        17
+      ],
+      "peak_hours": [
+        {
+          "peak_start": 10,
+          "peak_max": 13,
+          "peak_end": 16,
+          "peak_intensity": 4,
+          "peak_delta_mean_week": 47
+        }
+      ],
+      "surge_hours": {
+        "most_people_come": 10,
+        "most_people_leave": 16
+      },
+      "hour_analysis": [
+        {
+          "hour": 6,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 7,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 8,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 9,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 10,
+          "intensity_txt": "Average",
+          "intensity_nr": 0
+        },
+        {
+          "hour": 11,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 12,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 13,
+          "intensity_txt": "High",
+          "intensity_nr": 2
+        },
+        {
+          "hour": 14,
+          "intensity_txt": "High",
+          "intensity_nr": 2
+        },
+        {
+          "hour": 15,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 16,
+          "intensity_txt": "Above average",
+          "intensity_nr": 1
+        },
+        {
+          "hour": 17,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 18,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 19,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 20,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 21,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 22,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 23,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 0,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 1,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 2,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 3,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 4,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        },
+        {
+          "hour": 5,
+          "intensity_txt": "Closed",
+          "intensity_nr": 999
+        }
+      ],
+      "day_raw": [
+        0,
+        0,
+        0,
+        0,
+        40,
+        60,
+        75,
+        85,
+        85,
+        75,
+        55,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "api_key_private": "***REMOVED***"
+}
