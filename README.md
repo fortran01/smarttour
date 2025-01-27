@@ -123,3 +123,33 @@ To test the MCP server functionality using the MCP Inspector:
 ```bash
 npx @modelcontextprotocol/inspector npx tsx src/server.ts
 ```
+
+### Running in Claude Desktop MCP
+
+To use SmartTour with Claude Desktop, add the following configuration to your Claude Desktop MCP settings (typically in `~/.claude/mcp-config.json`):
+
+```json
+{
+  "mcpServers": {
+    "smarttour": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "TOMTOM_API_KEY=your_api_key_here",
+        "mcp/smarttour"
+      ]
+    }
+  }
+}
+```
+
+### Viewing Claude Desktop MCP Logs
+
+To monitor MCP logs from Claude Desktop:
+
+```bash
+tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
+```
