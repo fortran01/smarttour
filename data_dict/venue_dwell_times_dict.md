@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `venue_dwell_times.csv` file contains information about the estimated time visitors typically spend at various Toronto attractions. This data is used for tour planning and itinerary optimization.
+The `venue_dwell_times.csv` file contains information about the estimated time visitors typically spend at various Toronto attractions, sourced mostly from Google Maps data. This data is used for tour planning and itinerary optimization.
 
 ## File Format
 
