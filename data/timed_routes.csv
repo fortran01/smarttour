@@ -1,0 +1,384 @@
+Day,Time,From,To,Distance (km),Travel Time (min),Traffic Delay (min)
+Sunday,10:00,CN Tower,Casa Loma,5.51,21,0
+Sunday,10:00,Casa Loma,CN Tower,5.56,21,0
+Sunday,10:00,CN Tower,Royal Ontario Museum,3.6,14,0
+Sunday,10:00,Royal Ontario Museum,CN Tower,3.47,13,0
+Sunday,10:00,Casa Loma,Royal Ontario Museum,2.75,10,0
+Sunday,10:00,Royal Ontario Museum,Casa Loma,2.77,10,0
+Sunday,10:30,CN Tower,Casa Loma,5.51,21,0
+Sunday,10:30,Casa Loma,CN Tower,5.56,21,0
+Sunday,10:30,CN Tower,Royal Ontario Museum,3.6,14,0
+Sunday,10:30,Royal Ontario Museum,CN Tower,3.47,13,0
+Sunday,10:30,Casa Loma,Royal Ontario Museum,2.75,10,0
+Sunday,10:30,Royal Ontario Museum,Casa Loma,2.77,10,0
+Sunday,11:00,CN Tower,Casa Loma,5.51,22,0
+Sunday,11:00,Casa Loma,CN Tower,5.56,21,0
+Sunday,11:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Sunday,11:00,Royal Ontario Museum,CN Tower,3.47,13,0
+Sunday,11:00,Casa Loma,Royal Ontario Museum,2.75,10,0
+Sunday,11:00,Royal Ontario Museum,Casa Loma,3,11,0
+Sunday,11:30,CN Tower,Casa Loma,5.51,22,0
+Sunday,11:30,Casa Loma,CN Tower,5.56,22,0
+Sunday,11:30,CN Tower,Royal Ontario Museum,3.6,15,0
+Sunday,11:30,Royal Ontario Museum,CN Tower,3.47,13,0
+Sunday,11:30,Casa Loma,Royal Ontario Museum,2.75,11,0
+Sunday,11:30,Royal Ontario Museum,Casa Loma,3,11,0
+Sunday,12:00,CN Tower,Casa Loma,5.51,22,0
+Sunday,12:00,Casa Loma,CN Tower,5.56,22,0
+Sunday,12:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Sunday,12:00,Royal Ontario Museum,CN Tower,3.47,14,0
+Sunday,12:00,Casa Loma,Royal Ontario Museum,2.75,11,0
+Sunday,12:00,Royal Ontario Museum,Casa Loma,3,11,0
+Sunday,12:30,CN Tower,Casa Loma,5.51,22,0
+Sunday,12:30,Casa Loma,CN Tower,5.56,22,0
+Sunday,12:30,CN Tower,Royal Ontario Museum,3.6,15,0
+Sunday,12:30,Royal Ontario Museum,CN Tower,3.47,14,0
+Sunday,12:30,Casa Loma,Royal Ontario Museum,2.75,11,0
+Sunday,12:30,Royal Ontario Museum,Casa Loma,3,11,0
+Sunday,13:00,CN Tower,Casa Loma,5.51,22,0
+Sunday,13:00,Casa Loma,CN Tower,5.56,22,0
+Sunday,13:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Sunday,13:00,Royal Ontario Museum,CN Tower,3.47,14,0
+Sunday,13:00,Casa Loma,Royal Ontario Museum,2.75,11,0
+Sunday,13:00,Royal Ontario Museum,Casa Loma,3,11,0
+Sunday,13:30,CN Tower,Casa Loma,5.51,22,0
+Sunday,13:30,Casa Loma,CN Tower,6.03,22,0
+Sunday,13:30,Royal Ontario Museum,CN Tower,3.47,14,0
+Sunday,13:30,Royal Ontario Museum,Casa Loma,3,11,0
+Sunday,14:00,Casa Loma,CN Tower,6.03,22,0
+Sunday,14:00,Royal Ontario Museum,CN Tower,3.47,14,0
+Sunday,14:30,Casa Loma,CN Tower,6.03,22,0
+Sunday,14:30,Royal Ontario Museum,CN Tower,3.47,15,0
+Sunday,15:00,Casa Loma,CN Tower,6.03,23,0
+Sunday,15:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Sunday,15:30,Casa Loma,CN Tower,6.03,23,0
+Sunday,15:30,Royal Ontario Museum,CN Tower,3.47,15,0
+Sunday,16:00,Casa Loma,CN Tower,6.03,24,0
+Sunday,16:00,Royal Ontario Museum,CN Tower,3.47,16,0
+Sunday,16:30,Casa Loma,CN Tower,6.03,24,0
+Sunday,16:30,Royal Ontario Museum,CN Tower,3.47,16,0
+Sunday,17:00,Casa Loma,CN Tower,6.03,24,0
+Sunday,17:00,Royal Ontario Museum,CN Tower,3.47,16,0
+Monday,10:00,CN Tower,Casa Loma,5.51,22,0
+Monday,10:00,Casa Loma,CN Tower,5.54,22,0
+Monday,10:30,CN Tower,Casa Loma,5.51,22,0
+Monday,10:30,Casa Loma,CN Tower,5.54,22,0
+Monday,11:00,CN Tower,Casa Loma,5.51,23,0
+Monday,11:00,Casa Loma,CN Tower,5.54,22,0
+Monday,11:30,CN Tower,Casa Loma,5.51,23,0
+Monday,11:30,Casa Loma,CN Tower,5.54,23,0
+Monday,12:00,CN Tower,Casa Loma,5.51,23,0
+Monday,12:00,Casa Loma,CN Tower,5.54,23,0
+Monday,12:30,CN Tower,Casa Loma,5.51,23,0
+Monday,12:30,Casa Loma,CN Tower,5.54,23,0
+Monday,13:00,CN Tower,Casa Loma,5.51,23,0
+Monday,13:00,Casa Loma,CN Tower,5.54,23,0
+Monday,13:30,CN Tower,Casa Loma,5.51,23,0
+Monday,13:30,Casa Loma,CN Tower,5.56,23,0
+Monday,14:00,Casa Loma,CN Tower,5.56,24,0
+Monday,14:30,Casa Loma,CN Tower,6.03,24,0
+Monday,15:00,Casa Loma,CN Tower,5.95,25,0
+Monday,15:30,Casa Loma,CN Tower,5.95,26,0
+Monday,16:00,Casa Loma,CN Tower,5.95,27,0
+Monday,16:30,Casa Loma,CN Tower,5.87,27,0
+Monday,17:00,Casa Loma,CN Tower,5.95,28,0
+Tuesday,10:00,CN Tower,Casa Loma,5.51,22,0
+Tuesday,10:00,Casa Loma,CN Tower,5.54,22,0
+Tuesday,10:00,CN Tower,Royal Ontario Museum,3.6,14,0
+Tuesday,10:00,Royal Ontario Museum,CN Tower,3.47,14,0
+Tuesday,10:00,Casa Loma,Royal Ontario Museum,2.75,11,0
+Tuesday,10:00,Royal Ontario Museum,Casa Loma,2.91,11,0
+Tuesday,10:30,CN Tower,Casa Loma,5.51,22,0
+Tuesday,10:30,Casa Loma,CN Tower,5.54,22,0
+Tuesday,10:30,CN Tower,Royal Ontario Museum,3.6,15,0
+Tuesday,10:30,Royal Ontario Museum,CN Tower,3.47,14,0
+Tuesday,10:30,Casa Loma,Royal Ontario Museum,2.75,11,0
+Tuesday,10:30,Royal Ontario Museum,Casa Loma,2.91,11,0
+Tuesday,11:00,CN Tower,Casa Loma,5.51,23,0
+Tuesday,11:00,Casa Loma,CN Tower,5.54,22,0
+Tuesday,11:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Tuesday,11:00,Royal Ontario Museum,CN Tower,3.47,14,0
+Tuesday,11:00,Casa Loma,Royal Ontario Museum,2.75,11,0
+Tuesday,11:00,Royal Ontario Museum,Casa Loma,2.91,11,0
+Tuesday,11:30,CN Tower,Casa Loma,5.51,23,0
+Tuesday,11:30,Casa Loma,CN Tower,5.54,23,0
+Tuesday,11:30,CN Tower,Royal Ontario Museum,3.6,15,0
+Tuesday,11:30,Royal Ontario Museum,CN Tower,3.47,14,0
+Tuesday,11:30,Casa Loma,Royal Ontario Museum,2.75,11,0
+Tuesday,11:30,Royal Ontario Museum,Casa Loma,2.91,12,0
+Tuesday,12:00,CN Tower,Casa Loma,5.51,23,0
+Tuesday,12:00,Casa Loma,CN Tower,5.54,23,0
+Tuesday,12:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Tuesday,12:00,Royal Ontario Museum,CN Tower,3.47,14,0
+Tuesday,12:00,Casa Loma,Royal Ontario Museum,2.75,11,0
+Tuesday,12:00,Royal Ontario Museum,Casa Loma,2.91,12,0
+Tuesday,12:30,CN Tower,Casa Loma,5.51,23,0
+Tuesday,12:30,Casa Loma,CN Tower,5.54,23,0
+Tuesday,12:30,CN Tower,Royal Ontario Museum,3.6,15,0
+Tuesday,12:30,Royal Ontario Museum,CN Tower,3.47,14,0
+Tuesday,12:30,Casa Loma,Royal Ontario Museum,2.75,11,0
+Tuesday,12:30,Royal Ontario Museum,Casa Loma,2.91,12,0
+Tuesday,13:00,CN Tower,Casa Loma,5.51,23,0
+Tuesday,13:00,Casa Loma,CN Tower,5.54,23,0
+Tuesday,13:00,CN Tower,Royal Ontario Museum,3.6,14,0
+Tuesday,13:00,Royal Ontario Museum,CN Tower,3.47,14,0
+Tuesday,13:00,Casa Loma,Royal Ontario Museum,2.98,11,0
+Tuesday,13:00,Royal Ontario Museum,Casa Loma,2.91,12,0
+Tuesday,13:30,CN Tower,Casa Loma,5.51,23,0
+Tuesday,13:30,Casa Loma,CN Tower,5.56,24,0
+Tuesday,13:30,Royal Ontario Museum,CN Tower,3.47,14,0
+Tuesday,13:30,Royal Ontario Museum,Casa Loma,2.91,12,0
+Tuesday,14:00,Casa Loma,CN Tower,5.96,24,0
+Tuesday,14:00,Royal Ontario Museum,CN Tower,3.47,14,0
+Tuesday,14:30,Casa Loma,CN Tower,5.96,25,0
+Tuesday,14:30,Royal Ontario Museum,CN Tower,3.47,14,0
+Tuesday,15:00,Casa Loma,CN Tower,5.95,26,0
+Tuesday,15:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Tuesday,15:30,Casa Loma,CN Tower,5.95,27,0
+Tuesday,15:30,Royal Ontario Museum,CN Tower,3.47,15,0
+Tuesday,16:00,Casa Loma,CN Tower,5.95,28,0
+Tuesday,16:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Tuesday,16:30,Casa Loma,CN Tower,5.95,29,0
+Tuesday,16:30,Royal Ontario Museum,CN Tower,3.47,16,0
+Tuesday,17:00,Casa Loma,CN Tower,5.95,30,0
+Tuesday,17:00,Royal Ontario Museum,CN Tower,3.47,16,0
+Wednesday,10:00,CN Tower,Casa Loma,5.51,22,0
+Wednesday,10:00,Casa Loma,CN Tower,5.54,22,0
+Wednesday,10:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Wednesday,10:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Wednesday,10:00,Casa Loma,Royal Ontario Museum,2.95,12,0
+Wednesday,10:00,Royal Ontario Museum,Casa Loma,2.91,11,0
+Wednesday,10:30,CN Tower,Casa Loma,5.51,22,0
+Wednesday,10:30,Casa Loma,CN Tower,5.54,22,0
+Wednesday,10:30,CN Tower,Royal Ontario Museum,3.6,15,0
+Wednesday,10:30,Royal Ontario Museum,CN Tower,3.47,15,0
+Wednesday,10:30,Casa Loma,Royal Ontario Museum,2.95,12,0
+Wednesday,10:30,Royal Ontario Museum,Casa Loma,2.91,12,0
+Wednesday,11:00,CN Tower,Casa Loma,5.51,23,0
+Wednesday,11:00,Casa Loma,CN Tower,5.54,23,0
+Wednesday,11:00,CN Tower,Royal Ontario Museum,3.6,16,0
+Wednesday,11:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Wednesday,11:00,Casa Loma,Royal Ontario Museum,2.95,12,0
+Wednesday,11:00,Royal Ontario Museum,Casa Loma,2.91,12,0
+Wednesday,11:30,CN Tower,Casa Loma,5.51,23,0
+Wednesday,11:30,Casa Loma,CN Tower,5.54,23,0
+Wednesday,11:30,CN Tower,Royal Ontario Museum,3.6,16,0
+Wednesday,11:30,Royal Ontario Museum,CN Tower,3.47,15,0
+Wednesday,11:30,Casa Loma,Royal Ontario Museum,2.96,12,0
+Wednesday,11:30,Royal Ontario Museum,Casa Loma,2.91,12,0
+Wednesday,12:00,CN Tower,Casa Loma,5.51,23,0
+Wednesday,12:00,Casa Loma,CN Tower,5.56,23,0
+Wednesday,12:00,CN Tower,Royal Ontario Museum,3.6,16,0
+Wednesday,12:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Wednesday,12:00,Casa Loma,Royal Ontario Museum,2.96,12,0
+Wednesday,12:00,Royal Ontario Museum,Casa Loma,2.91,13,0
+Wednesday,12:30,CN Tower,Casa Loma,5.51,24,0
+Wednesday,12:30,Casa Loma,CN Tower,5.56,23,0
+Wednesday,12:30,CN Tower,Royal Ontario Museum,3.6,15,0
+Wednesday,12:30,Royal Ontario Museum,CN Tower,3.47,15,0
+Wednesday,12:30,Casa Loma,Royal Ontario Museum,2.96,11,0
+Wednesday,12:30,Royal Ontario Museum,Casa Loma,2.91,13,0
+Wednesday,13:00,CN Tower,Casa Loma,5.51,24,0
+Wednesday,13:00,Casa Loma,CN Tower,5.56,24,0
+Wednesday,13:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Wednesday,13:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Wednesday,13:00,Casa Loma,Royal Ontario Museum,2.96,11,0
+Wednesday,13:00,Royal Ontario Museum,Casa Loma,3.23,13,0
+Wednesday,13:30,CN Tower,Casa Loma,5.51,24,0
+Wednesday,13:30,Casa Loma,CN Tower,6.03,24,0
+Wednesday,13:30,Royal Ontario Museum,CN Tower,3.47,15,0
+Wednesday,13:30,Royal Ontario Museum,Casa Loma,3.23,13,0
+Wednesday,14:00,Casa Loma,CN Tower,5.87,25,0
+Wednesday,14:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Wednesday,14:30,Casa Loma,CN Tower,5.95,25,0
+Wednesday,14:30,Royal Ontario Museum,CN Tower,3.47,16,0
+Wednesday,15:00,Casa Loma,CN Tower,5.95,26,0
+Wednesday,15:00,Royal Ontario Museum,CN Tower,3.47,17,0
+Wednesday,15:30,Casa Loma,CN Tower,5.95,27,0
+Wednesday,15:30,Royal Ontario Museum,CN Tower,3.47,18,0
+Wednesday,16:00,Casa Loma,CN Tower,5.95,28,0
+Wednesday,16:00,Royal Ontario Museum,CN Tower,3.47,19,0
+Wednesday,16:30,Casa Loma,CN Tower,5.95,28,0
+Wednesday,16:30,Royal Ontario Museum,CN Tower,3.47,20,0
+Wednesday,17:00,Casa Loma,CN Tower,5.95,28,0
+Wednesday,17:00,Royal Ontario Museum,CN Tower,3.47,20,0
+Thursday,10:00,CN Tower,Casa Loma,5.51,22,0
+Thursday,10:00,Casa Loma,CN Tower,5.54,22,0
+Thursday,10:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Thursday,10:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Thursday,10:00,Casa Loma,Royal Ontario Museum,2.95,11,0
+Thursday,10:00,Royal Ontario Museum,Casa Loma,2.91,12,0
+Thursday,10:30,CN Tower,Casa Loma,5.51,22,0
+Thursday,10:30,Casa Loma,CN Tower,5.54,22,0
+Thursday,10:30,CN Tower,Royal Ontario Museum,3.6,16,0
+Thursday,10:30,Royal Ontario Museum,CN Tower,3.47,15,0
+Thursday,10:30,Casa Loma,Royal Ontario Museum,2.95,12,0
+Thursday,10:30,Royal Ontario Museum,Casa Loma,2.91,12,0
+Thursday,11:00,CN Tower,Casa Loma,5.51,23,0
+Thursday,11:00,Casa Loma,CN Tower,6.01,23,0
+Thursday,11:00,CN Tower,Royal Ontario Museum,3.6,16,0
+Thursday,11:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Thursday,11:00,Casa Loma,Royal Ontario Museum,2.95,12,0
+Thursday,11:00,Royal Ontario Museum,Casa Loma,2.91,12,0
+Thursday,11:30,CN Tower,Casa Loma,5.51,23,0
+Thursday,11:30,Casa Loma,CN Tower,5.98,23,0
+Thursday,11:30,CN Tower,Royal Ontario Museum,3.6,16,0
+Thursday,11:30,Royal Ontario Museum,CN Tower,3.46,15,0
+Thursday,11:30,Casa Loma,Royal Ontario Museum,2.95,12,0
+Thursday,11:30,Royal Ontario Museum,Casa Loma,2.91,13,0
+Thursday,12:00,CN Tower,Casa Loma,5.51,24,0
+Thursday,12:00,Casa Loma,CN Tower,5.98,23,0
+Thursday,12:00,CN Tower,Royal Ontario Museum,3.6,16,0
+Thursday,12:00,Royal Ontario Museum,CN Tower,3.44,15,0
+Thursday,12:00,Casa Loma,Royal Ontario Museum,2.95,12,0
+Thursday,12:00,Royal Ontario Museum,Casa Loma,2.91,13,0
+Thursday,12:30,CN Tower,Casa Loma,5.51,24,0
+Thursday,12:30,Casa Loma,CN Tower,5.98,23,0
+Thursday,12:30,CN Tower,Royal Ontario Museum,3.6,16,0
+Thursday,12:30,Royal Ontario Museum,CN Tower,3.46,15,0
+Thursday,12:30,Casa Loma,Royal Ontario Museum,2.96,12,0
+Thursday,12:30,Royal Ontario Museum,Casa Loma,3.23,13,0
+Thursday,13:00,CN Tower,Casa Loma,5.51,24,0
+Thursday,13:00,Casa Loma,CN Tower,5.98,23,0
+Thursday,13:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Thursday,13:00,Royal Ontario Museum,CN Tower,3.46,15,0
+Thursday,13:00,Casa Loma,Royal Ontario Museum,2.96,11,0
+Thursday,13:00,Royal Ontario Museum,Casa Loma,3.23,13,0
+Thursday,13:30,CN Tower,Casa Loma,5.51,24,0
+Thursday,13:30,Casa Loma,CN Tower,5.98,23,0
+Thursday,13:30,Royal Ontario Museum,CN Tower,3.46,15,0
+Thursday,13:30,Royal Ontario Museum,Casa Loma,3.23,13,0
+Thursday,14:00,Casa Loma,CN Tower,5.98,23,0
+Thursday,14:00,Royal Ontario Museum,CN Tower,3.46,16,0
+Thursday,14:30,Casa Loma,CN Tower,6,24,0
+Thursday,14:30,Royal Ontario Museum,CN Tower,3.46,16,0
+Thursday,15:00,Casa Loma,CN Tower,6,24,0
+Thursday,15:00,Royal Ontario Museum,CN Tower,3.46,17,0
+Thursday,15:30,Casa Loma,CN Tower,5.87,25,0
+Thursday,15:30,Royal Ontario Museum,CN Tower,3.46,19,0
+Thursday,16:00,Casa Loma,CN Tower,5.87,25,0
+Thursday,16:00,Royal Ontario Museum,CN Tower,3.46,20,0
+Thursday,16:30,Casa Loma,CN Tower,5.87,26,0
+Thursday,16:30,Royal Ontario Museum,CN Tower,3.46,21,0
+Thursday,17:00,Casa Loma,CN Tower,5.87,26,0
+Thursday,17:00,Royal Ontario Museum,CN Tower,3.46,22,0
+Friday,10:00,CN Tower,Casa Loma,5.51,21,0
+Friday,10:00,Casa Loma,CN Tower,6.03,20,0
+Friday,10:00,CN Tower,Royal Ontario Museum,3.6,16,0
+Friday,10:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Friday,10:00,Casa Loma,Royal Ontario Museum,2.95,12,0
+Friday,10:00,Royal Ontario Museum,Casa Loma,2.91,11,0
+Friday,10:30,CN Tower,Casa Loma,5.51,21,0
+Friday,10:30,Casa Loma,CN Tower,5.93,21,0
+Friday,10:30,CN Tower,Royal Ontario Museum,3.6,16,0
+Friday,10:30,Royal Ontario Museum,CN Tower,3.47,15,0
+Friday,10:30,Casa Loma,Royal Ontario Museum,2.95,12,0
+Friday,10:30,Royal Ontario Museum,Casa Loma,2.91,12,0
+Friday,11:00,CN Tower,Casa Loma,5.51,22,0
+Friday,11:00,Casa Loma,CN Tower,5.93,21,0
+Friday,11:00,CN Tower,Royal Ontario Museum,3.6,16,0
+Friday,11:00,Royal Ontario Museum,CN Tower,3.47,15,0
+Friday,11:00,Casa Loma,Royal Ontario Museum,2.95,12,0
+Friday,11:00,Royal Ontario Museum,Casa Loma,2.91,12,0
+Friday,11:30,CN Tower,Casa Loma,5.51,23,0
+Friday,11:30,Casa Loma,CN Tower,5.93,22,0
+Friday,11:30,CN Tower,Royal Ontario Museum,3.6,16,0
+Friday,11:30,Royal Ontario Museum,CN Tower,3.44,15,0
+Friday,11:30,Casa Loma,Royal Ontario Museum,2.96,12,0
+Friday,11:30,Royal Ontario Museum,Casa Loma,2.91,13,0
+Friday,12:00,CN Tower,Casa Loma,5.51,23,0
+Friday,12:00,Casa Loma,CN Tower,5.93,22,0
+Friday,12:00,CN Tower,Royal Ontario Museum,3.6,16,0
+Friday,12:00,Royal Ontario Museum,CN Tower,3.44,15,0
+Friday,12:00,Casa Loma,Royal Ontario Museum,2.98,12,0
+Friday,12:00,Royal Ontario Museum,Casa Loma,2.91,13,0
+Friday,12:30,CN Tower,Casa Loma,5.51,23,0
+Friday,12:30,Casa Loma,CN Tower,5.93,22,0
+Friday,12:30,CN Tower,Royal Ontario Museum,3.6,16,0
+Friday,12:30,Royal Ontario Museum,CN Tower,3.44,15,0
+Friday,12:30,Casa Loma,Royal Ontario Museum,2.98,12,0
+Friday,12:30,Royal Ontario Museum,Casa Loma,3.23,13,0
+Friday,13:00,CN Tower,Casa Loma,5.51,24,0
+Friday,13:00,Casa Loma,CN Tower,5.93,23,0
+Friday,13:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Friday,13:00,Royal Ontario Museum,CN Tower,3.44,15,0
+Friday,13:00,Casa Loma,Royal Ontario Museum,2.98,11,0
+Friday,13:00,Royal Ontario Museum,Casa Loma,3.23,13,0
+Friday,13:30,CN Tower,Casa Loma,5.51,24,0
+Friday,13:30,Casa Loma,CN Tower,5.93,23,0
+Friday,13:30,Royal Ontario Museum,CN Tower,3.44,15,0
+Friday,13:30,Royal Ontario Museum,Casa Loma,3.23,13,0
+Friday,14:00,Casa Loma,CN Tower,5.93,23,0
+Friday,14:00,Royal Ontario Museum,CN Tower,3.46,16,0
+Friday,14:30,Casa Loma,CN Tower,5.93,24,0
+Friday,14:30,Royal Ontario Museum,CN Tower,3.46,16,0
+Friday,15:00,Casa Loma,CN Tower,5.93,24,0
+Friday,15:00,Royal Ontario Museum,CN Tower,3.46,17,0
+Friday,15:30,Casa Loma,CN Tower,5.93,24,0
+Friday,15:30,Royal Ontario Museum,CN Tower,3.46,19,0
+Friday,16:00,Casa Loma,CN Tower,5.93,25,0
+Friday,16:00,Royal Ontario Museum,CN Tower,3.44,20,0
+Friday,16:30,Casa Loma,CN Tower,5.93,25,0
+Friday,16:30,Royal Ontario Museum,CN Tower,3.44,20,0
+Friday,17:00,Casa Loma,CN Tower,5.93,25,0
+Friday,17:00,Royal Ontario Museum,CN Tower,3.46,20,0
+Saturday,10:00,CN Tower,Casa Loma,5.51,20,0
+Saturday,10:00,Casa Loma,CN Tower,6.03,20,0
+Saturday,10:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Saturday,10:00,Royal Ontario Museum,CN Tower,3.47,14,0
+Saturday,10:00,Casa Loma,Royal Ontario Museum,2.96,11,0
+Saturday,10:00,Royal Ontario Museum,Casa Loma,2.91,11,0
+Saturday,10:30,CN Tower,Casa Loma,5.51,20,0
+Saturday,10:30,Casa Loma,CN Tower,6.03,20,0
+Saturday,10:30,CN Tower,Royal Ontario Museum,3.6,15,0
+Saturday,10:30,Royal Ontario Museum,CN Tower,3.47,14,0
+Saturday,10:30,Casa Loma,Royal Ontario Museum,2.96,11,0
+Saturday,10:30,Royal Ontario Museum,Casa Loma,2.91,12,0
+Saturday,11:00,CN Tower,Casa Loma,5.51,21,0
+Saturday,11:00,Casa Loma,CN Tower,6.03,21,0
+Saturday,11:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Saturday,11:00,Royal Ontario Museum,CN Tower,3.47,14,0
+Saturday,11:00,Casa Loma,Royal Ontario Museum,2.96,11,0
+Saturday,11:00,Royal Ontario Museum,Casa Loma,2.91,12,0
+Saturday,11:30,CN Tower,Casa Loma,5.51,21,0
+Saturday,11:30,Casa Loma,CN Tower,6.03,21,0
+Saturday,11:30,CN Tower,Royal Ontario Museum,3.6,15,0
+Saturday,11:30,Royal Ontario Museum,CN Tower,3.47,14,0
+Saturday,11:30,Casa Loma,Royal Ontario Museum,2.96,11,0
+Saturday,11:30,Royal Ontario Museum,Casa Loma,2.91,12,0
+Saturday,12:00,CN Tower,Casa Loma,5.51,21,0
+Saturday,12:00,Casa Loma,CN Tower,6.03,21,0
+Saturday,12:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Saturday,12:00,Royal Ontario Museum,CN Tower,3.44,15,0
+Saturday,12:00,Casa Loma,Royal Ontario Museum,2.96,11,0
+Saturday,12:00,Royal Ontario Museum,Casa Loma,2.91,13,0
+Saturday,12:30,CN Tower,Casa Loma,5.51,22,0
+Saturday,12:30,Casa Loma,CN Tower,6.03,21,0
+Saturday,12:30,CN Tower,Royal Ontario Museum,3.6,15,0
+Saturday,12:30,Royal Ontario Museum,CN Tower,3.44,15,0
+Saturday,12:30,Casa Loma,Royal Ontario Museum,2.96,11,0
+Saturday,12:30,Royal Ontario Museum,Casa Loma,3.23,13,0
+Saturday,13:00,CN Tower,Casa Loma,5.51,22,0
+Saturday,13:00,Casa Loma,CN Tower,6.03,21,0
+Saturday,13:00,CN Tower,Royal Ontario Museum,3.6,15,0
+Saturday,13:00,Royal Ontario Museum,CN Tower,3.44,15,0
+Saturday,13:00,Casa Loma,Royal Ontario Museum,2.96,11,0
+Saturday,13:00,Royal Ontario Museum,Casa Loma,3.23,13,0
+Saturday,13:30,CN Tower,Casa Loma,5.51,22,0
+Saturday,13:30,Casa Loma,CN Tower,6.03,21,0
+Saturday,13:30,Royal Ontario Museum,CN Tower,3.44,15,0
+Saturday,13:30,Royal Ontario Museum,Casa Loma,3.23,13,0
+Saturday,14:00,Casa Loma,CN Tower,6.03,22,0
+Saturday,14:00,Royal Ontario Museum,CN Tower,3.44,15,0
+Saturday,14:30,Casa Loma,CN Tower,5.93,22,0
+Saturday,14:30,Royal Ontario Museum,CN Tower,3.44,15,0
+Saturday,15:00,Casa Loma,CN Tower,5.93,22,0
+Saturday,15:00,Royal Ontario Museum,CN Tower,3.44,16,0
+Saturday,15:30,Casa Loma,CN Tower,5.93,22,0
+Saturday,15:30,Royal Ontario Museum,CN Tower,3.44,16,0
+Saturday,16:00,Casa Loma,CN Tower,5.93,23,0
+Saturday,16:00,Royal Ontario Museum,CN Tower,3.47,17,0
+Saturday,16:30,Casa Loma,CN Tower,5.93,23,0
+Saturday,16:30,Royal Ontario Museum,CN Tower,3.47,17,0
+Saturday,17:00,Casa Loma,CN Tower,5.93,23,0
+Saturday,17:00,Royal Ontario Museum,CN Tower,3.47,17,0

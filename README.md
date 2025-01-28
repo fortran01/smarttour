@@ -146,6 +146,48 @@ To use SmartTour with Claude Desktop, add the following configuration to your Cl
 }
 ```
 
+### Fetching Timed Routes
+
+The `fetchTimedRoutes.ts` script generates comprehensive route timing data between attractions, taking into account:
+- Venue operating hours
+- Required dwell times at each venue
+- Real-time traffic conditions
+- Time-based routing for different days of the week
+
+#### How it works
+
+1. Loads venue data and operating schedules for all attractions
+2. Reads minimum dwell times from `venue_dwell_times.csv`
+3. Calculates routes between venue pairs for each day of the week
+4. Generates time slots at 30-minute intervals during overlapping operating hours
+5. Validates routes based on:
+   - Sufficient time to spend at the origin venue
+   - Adequate remaining time at the destination venue
+   - Real-time traffic conditions
+6. Saves results to `data/timed_routes.csv`
+
+#### Running the script
+
+```bash
+# Set up your TomTom API key in .env:
+TOMTOM_API_KEY=your_api_key_here
+
+# Run the timed routes fetcher:
+bun run fetch:routes
+```
+
+The script will:
+- Process routes for all days of the week
+- Calculate bi-directional routes between all venue pairs
+- Skip existing routes to avoid duplicate API calls
+- Display progress and validation information
+- Save results in CSV format with:
+  - Day and time of departure
+  - Origin and destination venues
+  - Distance in kilometers
+  - Travel time in minutes
+  - Traffic delay in minutes
+
 ### Viewing Claude Desktop MCP Logs
 
 To monitor MCP logs from Claude Desktop:
