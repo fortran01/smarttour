@@ -190,26 +190,33 @@ The script will:
 
 ### Constraint Programming Model
 
-The project uses a constraint programming model (implemented in `src/cpm/model.py`) to optimize tour itineraries. The model:
+The project uses a constraint programming model (implemented in `src/cpm/model.py`) to optimize tour itineraries, with data loading handled by `src/cpm/data_loader.py`. The system:
 
-1. **Optimizes for Multiple Objectives**:
+1. **Data Loading and Processing**:
+   - Loads venue data from individual JSON files
+   - Processes operating hours with support for multiple open/close intervals per day
+   - Handles dwell times from `venue_dwell_times.csv`
+   - Manages travel times with intelligent time slot matching
+   - Extracts and normalizes crowd levels from venue data
+
+2. **Optimizes for Multiple Objectives**:
    - Minimizes total travel time between venues
    - Minimizes exposure to crowds
    - Maximizes the number of venues visited
 
-2. **Handles Key Constraints**:
-   - Venue operating hours and time windows
+3. **Handles Key Constraints**:
+   - Venue operating hours with support for multiple open/close periods
    - Required dwell times at each venue
    - Travel times between venues (with traffic)
    - No overlapping visits
    - Sequential visit ordering
 
-3. **Input Data Required**:
-   - List of venues to consider
-   - Dwell times for each venue (from `venue_dwell_times.csv`)
-   - Available time slots (30-minute intervals)
-   - Travel times between venues (from `timed_routes.csv`)
-   - Crowd levels for each venue and time slot
+4. **Input Data Structure**:
+   - Individual venue JSON files with operating hours and crowd data
+   - `venue_dwell_times.csv` for required visit durations
+   - `timed_routes.csv` for travel times between venues
+   - Time slots in 30-minute intervals
+   - Day-specific operating hours and crowd levels
 
 #### Testing the Model
 
