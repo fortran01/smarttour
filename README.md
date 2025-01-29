@@ -249,47 +249,57 @@ test_time_window_constraints PASSED
 test_travel_time_constraints PASSED
 ```
 
-#### Using the Model
+#### Sample Optimization Run
 
-```python
-from cpm.model import TourOptimizer
+To run the tour optimizer with the sample data:
 
-# Initialize the optimizer
-optimizer = TourOptimizer(
-    venues=["CN Tower", "Casa Loma", "Royal Ontario Museum"],
-    dwell_times={
-        "CN Tower": 3.0,          # hours
-        "Casa Loma": 3.0,
-        "Royal Ontario Museum": 3.5
-    },
-    time_slots=["09:00", "09:30", ...],  # 30-min intervals
-    travel_times={
-        ("CN Tower", "Casa Loma", "10:00"): 20,  # minutes
-        ...
-    },
-    crowd_levels={
-        ("CN Tower", "10:00"): 50,  # crowd intensity
-        ...
-    },
-    tour_start_time="09:00",
-    tour_end_time="21:00"
-)
-
-# Solve and get the optimized itinerary
-solution = optimizer.solve()
-
-if solution:
-    print("Selected venues:", solution["selected_venues"])
-    print("Start times:", solution["start_times"])
-    print("Schedule:", solution["schedule"])
-    print("Metrics:", solution["metrics"])
+```bash
+python -m src.cpm.optimize_tour
 ```
 
-The solution includes:
-- List of selected venues in visit order
-- Start time for each venue
-- Detailed schedule with timing and crowd levels
-- Optimization metrics (travel time, crowds, etc.)
+Here's an example output showing an optimized Tuesday itinerary for three major Toronto attractions:
+
+```
+Optimized Tour Schedule:
+==================================================
+
+Casa Loma:
+  Start time: 10:00
+  End time: 13:00
+  Duration: 3.0 hours
+  Crowd level: -0.3
+  Travel to next venue: 11 min
+
+Royal Ontario Museum:
+  Start time: 13:30
+  End time: 17:00
+  Duration: 3.5 hours
+  Crowd level: 1.0
+  Travel to next venue: 17 min
+
+CN Tower:
+  Start time: 17:30
+  End time: 20:30
+  Duration: 3.0 hours
+  Crowd level: -0.3
+
+Tour Metrics:
+==================================================
+Total venues visited: 3
+Total travel time: 28 minutes
+Average travel time: 14.0 minutes
+Average crowd level: 0.1
+```
+
+The optimizer has created an efficient schedule that:
+1. Starts at Casa Loma during its quieter morning hours
+2. Visits the Royal Ontario Museum during mid-afternoon
+3. Ends at the CN Tower for evening views of the city
+4. Minimizes both travel time (28 minutes total) and crowd exposure (0.1 average level)
+5. Respects each venue's operating hours and required visit durations
+6. Allows sufficient time for travel between venues
+
+Crowd levels are on a scale from -2 (very quiet) to +2 (very busy), with 0 representing average crowds.
 
 ### Viewing Claude Desktop MCP Logs
 
