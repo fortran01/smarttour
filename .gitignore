@@ -31,3 +31,16 @@ yarn-error.log*
 
 # Data
 # data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.env
+.venv
+env/
+ENV/
+*.so
+.python-version

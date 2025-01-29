@@ -188,6 +188,102 @@ The script will:
   - Travel time in minutes
   - Traffic delay in minutes
 
+### Constraint Programming Model
+
+The project uses a constraint programming model (implemented in `src/cpm/model.py`) to optimize tour itineraries. The model:
+
+1. **Optimizes for Multiple Objectives**:
+   - Minimizes total travel time between venues
+   - Minimizes exposure to crowds
+   - Maximizes the number of venues visited
+
+2. **Handles Key Constraints**:
+   - Venue operating hours and time windows
+   - Required dwell times at each venue
+   - Travel times between venues (with traffic)
+   - No overlapping visits
+   - Sequential visit ordering
+
+3. **Input Data Required**:
+   - List of venues to consider
+   - Dwell times for each venue (from `venue_dwell_times.csv`)
+   - Available time slots (30-minute intervals)
+   - Travel times between venues (from `timed_routes.csv`)
+   - Crowd levels for each venue and time slot
+
+#### Testing the Model
+
+To run the test suite for the constraint programming model:
+
+```bash
+# Ensure you're in the project root
+cd /path/to/smarttour
+
+# Set up Python environment if not already done
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# Run the tests
+PYTHONPATH=. pytest src/cpm/test_cpm.py -v
+```
+
+The test suite includes:
+- Basic model initialization
+- Solving a simple tour with 3 venues
+- Time window constraint validation
+- Travel time constraint validation
+
+Example test output:
+```
+test_basic_initialization PASSED
+test_solve_basic_tour PASSED
+test_time_window_constraints PASSED
+test_travel_time_constraints PASSED
+```
+
+#### Using the Model
+
+```python
+from cpm.model import TourOptimizer
+
+# Initialize the optimizer
+optimizer = TourOptimizer(
+    venues=["CN Tower", "Casa Loma", "Royal Ontario Museum"],
+    dwell_times={
+        "CN Tower": 3.0,          # hours
+        "Casa Loma": 3.0,
+        "Royal Ontario Museum": 3.5
+    },
+    time_slots=["09:00", "09:30", ...],  # 30-min intervals
+    travel_times={
+        ("CN Tower", "Casa Loma", "10:00"): 20,  # minutes
+        ...
+    },
+    crowd_levels={
+        ("CN Tower", "10:00"): 50,  # crowd intensity
+        ...
+    },
+    tour_start_time="09:00",
+    tour_end_time="21:00"
+)
+
+# Solve and get the optimized itinerary
+solution = optimizer.solve()
+
+if solution:
+    print("Selected venues:", solution["selected_venues"])
+    print("Start times:", solution["start_times"])
+    print("Schedule:", solution["schedule"])
+    print("Metrics:", solution["metrics"])
+```
+
+The solution includes:
+- List of selected venues in visit order
+- Start time for each venue
+- Detailed schedule with timing and crowd levels
+- Optimization metrics (travel time, crowds, etc.)
+
 ### Viewing Claude Desktop MCP Logs
 
 To monitor MCP logs from Claude Desktop:
