@@ -312,3 +312,95 @@ To monitor MCP logs from Claude Desktop:
 ```bash
 tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
 ```
+
+### Scripts Overview
+
+The project includes several utility scripts in `src/scripts/` for data collection and testing:
+
+#### `fetchTimedRoutes.ts`
+
+A comprehensive route timing data generator that:
+- Calculates routes between all venue pairs for each day of the week
+- Takes into account venue operating hours and required dwell times
+- Generates time slots at 30-minute intervals during overlapping operating hours
+- Validates routes based on:
+  - Sufficient time to spend at origin venue
+  - Adequate remaining time at destination venue
+  - Real-time traffic conditions
+- Saves results to `data/timed_routes.csv`
+
+Usage:
+```bash
+# Set up your TomTom API key in .env:
+TOMTOM_API_KEY=your_api_key_here
+
+# Run the timed routes fetcher:
+bun run fetch:routes
+```
+
+#### `prefetchAttractions.ts`
+
+Prefetches and caches foot traffic data for Toronto attractions using BestTime.app's API:
+- Fetches forecasts for 10 major Toronto attractions
+- Saves individual attraction data to `data/{attraction_name}.json`
+- Creates a combined dataset in `data/all_attractions.json`
+- Implements rate limiting and error handling
+- Saves API credits by caching predictions
+
+Usage:
+```bash
+# Set up your BestTime.app API key in .env:
+BESTTIME_API_KEY=your_api_key_here
+
+# Run the prefetch script:
+bun run prefetch
+```
+
+#### `testRouting.ts`
+
+Tests the TomTom Routing API functionality with various timing options:
+- Calculates routes between CN Tower and Casa Loma (both directions)
+- Supports departure and arrival time specifications
+- Saves detailed route data to `data/routes/`
+- Provides route summaries with:
+  - Distance in kilometers
+  - Travel time in minutes
+  - Traffic delay information
+
+Usage:
+```bash
+# Set up your TomTom API key in .env:
+TOMTOM_API_KEY=your_api_key_here
+
+# Test with current traffic conditions:
+bun run test:routes
+
+# Test with specific departure time:
+bun run test:routes --depart-at 2024-01-20T09:00:00
+
+# Test with specific arrival time:
+bun run test:routes --arrive-at 2024-01-20T17:30:00
+
+# Show usage information:
+bun run test:routes --help
+```
+
+#### `testVenueFetching.ts`
+
+Tests the BestTime.app Venues API functionality:
+- Retrieves all venues in your BestTime.app account
+- Displays detailed venue information:
+  - Venue name and address
+  - Forecasting status
+  - Last forecast update time
+  - Venue ID
+- Useful for verifying venue data and API integration
+
+Usage:
+```bash
+# Set up your BestTime.app API key in .env:
+BESTTIME_API_KEY=your_api_key_here
+
+# Run the venue test:
+bun run test:venues
+```
