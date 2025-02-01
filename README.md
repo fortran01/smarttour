@@ -1,5 +1,35 @@
 # SmartTour
 
+- [SmartTour](#smarttour)
+  - [Solution Overview](#solution-overview)
+  - [Features](#features)
+    - [Core Features (MVP)](#core-features-mvp)
+    - [User Interface](#user-interface)
+    - [Limitations](#limitations)
+  - [Tech Stack](#tech-stack)
+  - [Development](#development)
+    - [Prefetching Attraction Data](#prefetching-attraction-data)
+      - [Why Prefetch?](#why-prefetch)
+      - [How to Prefetch](#how-to-prefetch)
+    - [Testing Venue Data](#testing-venue-data)
+    - [Testing Routes with Timing](#testing-routes-with-timing)
+    - [Running in MCP Inspector](#running-in-mcp-inspector)
+    - [Running in Claude Desktop MCP](#running-in-claude-desktop-mcp)
+    - [Fetching Timed Routes](#fetching-timed-routes)
+      - [How it works](#how-it-works)
+      - [Running the script](#running-the-script)
+    - [Constraint Programming Model](#constraint-programming-model)
+      - [Model Architecture Diagram](#model-architecture-diagram)
+      - [Testing the Model](#testing-the-model)
+      - [Sample Optimization Run](#sample-optimization-run)
+    - [Viewing Claude Desktop MCP Logs](#viewing-claude-desktop-mcp-logs)
+    - [Scripts Overview](#scripts-overview)
+      - [`fetchTimedRoutes.ts`](#fetchtimedroutests)
+      - [`prefetchAttractions.ts`](#prefetchattractionsts)
+      - [`testRouting.ts`](#testroutingts)
+      - [`testVenueFetching.ts`](#testvenuefetchingts)
+
+
 SmartTour is a proof-of-concept application that optimizes tourist itineraries by combining real-time crowd data from BestTime.app and traffic information from TomTom Traffic Stats. The goal is to help tourists maximize their sightseeing experience by minimizing time spent in queues and traffic.
 
 ## Solution Overview
