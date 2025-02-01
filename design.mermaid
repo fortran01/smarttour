@@ -1,0 +1,20 @@
+flowchart TD
+    classDef inputClass fill:#e1f5fe,stroke:#01579b
+    classDef processClass fill:#f3e5f5,stroke:#4a148c
+    classDef outputClass fill:#e8f5e9,stroke:#1b5e20
+
+    Input[("Input Data<br>- Venues<br>- Opening hours<br>- Crowd levels<br>- Travel times")] --> Optimizer{{"Tour Optimizer"}}
+    Preferences["User Preferences<br>- Start time<br>- End time<br>- Day of week"] --> Optimizer
+    
+    Optimizer --> Rules["Applies Rules:<br>1. No venue overlap<br>2. Follow opening hours<br>3. Allow travel time<br>4. Stay within time window"]
+    
+    Rules --> Goals["Optimizes for:<br>1. Visit more places<br>2. Minimize travel time<br>3. Avoid crowds"]
+    
+    Goals --> Schedule["Creates Schedule"]
+    
+    Schedule --> Output["Final Tour Plan<br>- Ordered list of venues<br>- Start/end times<br>- Travel instructions"]
+    
+    class Input inputClass
+    class Preferences inputClass
+    class Optimizer,Rules,Goals processClass
+    class Output,Schedule outputClass
