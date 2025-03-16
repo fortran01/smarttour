@@ -18,16 +18,17 @@ Constraints:
 The model uses 30-minute time slots and supports flexible tour start/end times.
 """
 
-from typing import Dict, List, Optional, Tuple, Literal
+from typing import Dict, List, Optional, Tuple
 from cpmpy import Model
 from cpmpy.expressions.variables import IntVar, BoolVar
 from cpmpy.solvers import CPM_ortools
+import logging
+
+# Set up logger
+logger = logging.getLogger(__name__)
 
 # Type alias for days of the week
-DayOfWeek = Literal[
-    "Monday", "Tuesday", "Wednesday", "Thursday",
-    "Friday", "Saturday", "Sunday"
-]
+DayOfWeek = str
 
 # Mapping of day names to integers (0 = Monday, 6 = Sunday)
 DAY_TO_INT = {
@@ -77,6 +78,7 @@ class TourOptimizer:
         w_travel: Weight for travel time
         w_crowd: Weight for crowd levels
         w_venues: Weight for number of venues
+        min_venues: Minimum number of venues to visit
     """
     
     def __init__(
@@ -126,6 +128,9 @@ class TourOptimizer:
         self.w_travel = 1.0     # Weight for travel time
         self.w_crowd = 0.5      # Weight for crowd levels
         self.w_venues = -20.0   # Weight for number of venues (negative to maximize)
+        
+        # Set minimum number of venues to visit (default: 1)
+        self.min_venues = 1
         
         # Convert dwell times from hours to number of 30-min slots
         self.dwell_slots = {}
@@ -180,97 +185,65 @@ class TourOptimizer:
     
     def _add_constraints(self):
         """Add all constraints to the model."""
+        # Clear existing constraints to avoid duplicates when updating
+        self.model = Model()
+        
+        # Recreate variables since we reset the model
+        self._create_variables()
+        
+        # Add constraints
         self._add_time_window_constraints()
         self._add_sequence_constraints()
         self._add_overlap_constraints()
+        
+        # Reset objective with current weights
+        self._set_objective()
     
     def _add_time_window_constraints(self):
-        """Add constraints for time windows and operating hours.
+        """Add constraints for time windows.
         
-        This method adds three types of time window constraints:
-        1. Venue-specific operating hours for the given day
-        2. Tour-wide time window (start/end times)
-        3. Valid time slots for each venue's entire visit duration
-        
-        For each venue i:
-        - If selected (x[i] = 1):
-            * Start time must be in valid slots for the given day
-            * Entire visit must be within valid slots
-            * Visit must end before closing time
-        - If not selected (x[i] = 0):
-            * No constraints on time variables
+        This method adds constraints to ensure:
+        1. Visits start within the overall tour window
+        2. Visits start and end within venue-specific operating hours
+        3. All time slots during a visit are within valid operating hours
         """
-        # First, add venue-specific time window constraints
         for i, venue in enumerate(self.venues):
-            # Get valid time slots for this venue on this day
-            valid_slots = self.venue_open_slots.get(
-                (venue, self.day),
-                list(range(self.n_slots))  # Default if not specified
-            )
-            dwell = self.dwell_slots[venue]
+            # Get valid slots for this venue on this day
+            valid_slots = self.venue_open_slots.get((venue, self.day), [])
             
-            # If venue is selected (x[i] = 1):
-            # 1. Start time must be in valid slots for this day
-            if valid_slots:  # Only add constraint if we have valid slots
-                # Create a disjunction of valid start times
-                valid_starts = [self.t[i] == slot for slot in valid_slots]
-                # Add constraint: if venue is selected, start time must be valid
-                self.model += self.x[i].implies(any(valid_starts))
-            
-            # 2. Entire visit (start + dwell) must be within valid slots
-            # For each possible start time, check if all slots until dwell 
-            # time are valid
-            for start in range(self.n_slots):
-                visit_slots = range(start, min(start + dwell, self.n_slots))
-                # A start time is valid if all slots during visit are valid
-                is_valid_start = all(slot in valid_slots for slot in visit_slots)
-                if not is_valid_start:
-                    # If any slot in the visit duration is invalid,
-                    # this start time is not allowed if venue is selected
-                    self.model += self.x[i].implies(self.t[i] != start)
-            
-            # 3. Visit must end before closing time
-            # Find the last valid slot for this venue
             if valid_slots:
-                last_valid_slot = max(valid_slots)
-                self.model += self.x[i].implies(
-                    self.t[i] + dwell <= last_valid_slot + 1
+                # Get earliest and latest valid slots
+                earliest_valid = min(valid_slots)
+                latest_valid = max(valid_slots)
+                
+                # Calculate latest possible start time that allows full visit within opening hours
+                latest_start = (
+                    latest_valid - self.dwell_slots[venue] + 1
                 )
+                
+                # 1. If venue is selected, start time must be within valid range
+                self.model += self.x[i].implies(
+                    (self.t[i] >= max(self.tour_start_slot, earliest_valid)) &
+                    (self.t[i] <= min(self.tour_end_slot, latest_start))
+                )
+                
+                # 2. Ensure end time is within valid slots
+                self.model += self.x[i].implies(
+                    self.t[i] + self.dwell_slots[venue] <= latest_valid + 1
+                )
+                
+                # 3. For each potential start time, ensure all visit slots are valid
+                for t in range(self.n_slots):
+                    # Calculate visit slots for this start time
+                    visit_end = t + self.dwell_slots[venue]
+                    visit_slots = list(range(t, visit_end))
+                    
+                    # If any visit slot is invalid, this start time is not allowed
+                    if not all(slot in valid_slots for slot in visit_slots):
+                        self.model += self.x[i].implies(self.t[i] != t)
             else:
-                # If no valid slots specified, use general closing time
-                self.model += self.x[i].implies(
-                    self.t[i] + dwell <= self.n_slots
-                )
-        
-        # Add tour-wide time window constraints
-        for i in range(self.n_venues):
-            # Selected venues must start after tour_start_time
-            self.model += self.x[i].implies(
-                self.t[i] >= self.tour_start_slot
-            )
-            
-            # Selected venues must end before tour_end_time
-            self.model += self.x[i].implies(
-                self.t[i] + self.dwell_slots[self.venues[i]] <= 
-                self.tour_end_slot
-            )
-        
-        # Ensure first venue starts after tour_start_time
-        first_venue_constraints = [
-            (self.p[i] == 1).implies(self.t[i] >= self.tour_start_slot)
-            for i in range(self.n_venues)
-        ]
-        self.model += any(first_venue_constraints)
-        
-        # Ensure last venue ends before tour_end_time
-        last_venue_constraints = [
-            (self.p[i] == sum(self.x)).implies(
-                self.t[i] + self.dwell_slots[self.venues[i]] <= 
-                self.tour_end_slot
-            )
-            for i in range(self.n_venues)
-        ]
-        self.model += any(last_venue_constraints)
+                # If no valid slots, venue cannot be selected
+                self.model += ~self.x[i]
     
     def _add_sequence_constraints(self):
         """Add constraints for sequential visit ordering.
@@ -279,7 +252,8 @@ class TourOptimizer:
         1. Each selected venue has a unique position in sequence
         2. Positions are consecutive starting from 1
         3. Travel times between consecutive venues are respected
-        4. No overlapping visits
+        4. Visits respect venue closing times when considering 
+           travel between venues
         """
         # 1. Each selected venue has a unique position
         for i in range(self.n_venues):
@@ -292,10 +266,8 @@ class TourOptimizer:
         # First, count how many venues are selected
         n_selected = sum(self.x)
         
-        # Allow the optimizer to select any number of venues
-        # This enables skipping venues that are closed on the selected day
-        # We still want to visit at least one venue
-        self.model += n_selected >= 1
+        # Allow the optimizer to select at least min_venues venues
+        self.model += n_selected >= self.min_venues
         
         # Then ensure positions are 1..n_selected
         for i in range(self.n_venues):
@@ -312,64 +284,79 @@ class TourOptimizer:
             # If pos > n_selected, no venue can have this position
             self.model += (pos > n_selected).implies(pos_count == 0)
         
-        # 3. Travel times between consecutive venues must be respected
+        # 3 & 4. Add travel time and closing time constraints
         for i in range(self.n_venues):
+            venue_i = self.venues[i]
+            # Get valid slots for venue i
+            valid_slots_i = self.venue_open_slots.get((venue_i, self.day), [])
+            if not valid_slots_i:
+                continue
+                
+            latest_valid_i = max(valid_slots_i)
+            dwell_i = self.dwell_slots[venue_i]
+            
             for j in range(self.n_venues):
-                if i != j:
-                    # If venue j follows venue i in sequence
-                    follows = (self.p[j] == self.p[i] + 1)
+                if i == j:
+                    continue
                     
-                    # For each possible time slot
-                    for slot_idx, slot_time in enumerate(self.time_slots):
-                        # If i starts at this slot
-                        i_starts_at = (self.t[i] == slot_idx)
-                        if i_starts_at:
-                            # Get travel time from i to j
-                            travel_key = (
-                                self.venues[i],
-                                self.venues[j],
-                                slot_time,
-                                self.day
-                            )
-                            travel_time = self.travel_times.get(
-                                travel_key,
-                                30  # Default 30 minutes if not specified
-                            )
-                            # Convert travel time to number of slots
-                            travel_slots = (travel_time + 29) // 30
-                            # j must start after i ends plus travel time
-                            self.model += (follows & i_starts_at).implies(
-                                self.t[j] >= slot_idx + 
-                                self.dwell_slots[self.venues[i]] +
-                                travel_slots
-                            )
-        
-        # 4. No overlapping visits
-        for i in range(self.n_venues):
-            for j in range(i + 1, self.n_venues):
-                # If both venues are selected
-                both_selected = self.x[i] & self.x[j]
-                # They must not overlap in time
-                self.model += both_selected.implies(
-                    (self.t[i] + self.dwell_slots[self.venues[i]] <= 
-                     self.t[j]) |
-                    (self.t[j] + self.dwell_slots[self.venues[j]] <= 
-                     self.t[i])
+                venue_j = self.venues[j]
+                # Get valid slots for venue j
+                valid_slots_j = self.venue_open_slots.get(
+                    (venue_j, self.day), []
                 )
+                if not valid_slots_j:
+                    continue
+                    
+                latest_valid_j = max(valid_slots_j)
+                dwell_j = self.dwell_slots[venue_j]
+                
+                # If j follows i directly
+                is_consecutive = (self.p[j] == self.p[i] + 1)
+                both_selected = self.x[i] & self.x[j]
+                
+                # For each possible end time of venue i
+                for slot_idx in range(self.n_slots):
+                    # If venue i starts at this slot
+                    i_starts_at_slot = (self.t[i] == slot_idx)
+                    
+                    # Calculate when venue i would end
+                    i_end_slot = slot_idx + dwell_i
+                    
+                    # If i would end after closing, this start time not allowed
+                    if i_end_slot > latest_valid_i:
+                        self.model += ~(self.x[i] & i_starts_at_slot)
+                        continue
+                    
+                    # Get travel time from i to j at this end time
+                    if i_end_slot < len(self.time_slots):
+                        end_time = self.time_slots[i_end_slot]
+                        travel_key = (
+                            venue_i, venue_j, end_time, self.day
+                        )
+                        
+                        if travel_key in self.travel_times:
+                            travel_time = self.travel_times[travel_key]
+                            # Convert minutes to slots (round up)
+                            travel_slots = (travel_time + 29) // 30
+                            
+                            # j must start after i ends plus travel time
+                            # AND j must end before its closing time
+                            j_earliest_start = i_end_slot + travel_slots
+                            j_latest_start = latest_valid_j - dwell_j
+                            
+                            # If consecutive and i starts at slot_idx,
+                            # j must start in valid window
+                            self.model += ~(
+                                both_selected & 
+                                is_consecutive & 
+                                i_starts_at_slot
+                            ) | (
+                                (self.t[j] >= j_earliest_start) &
+                                (self.t[j] <= j_latest_start)
+                            )
     
     def _add_overlap_constraints(self):
-        """Add constraints to prevent time slot overlaps.
-        
-        This method ensures that no two venues can be visited at the same time.
-        For each pair of venues i,j:
-        1. Either i ends before j starts
-        2. Or j ends before i starts
-        3. Or at least one is not selected
-        
-        Also adds constraints to ensure:
-        - Selected venues have different positions
-        - Consecutive venues respect travel times
-        """
+        """Add constraints to prevent time slot overlaps."""
         # For each pair of venues
         for i in range(self.n_venues):
             for j in range(i + 1, self.n_venues):
@@ -393,35 +380,35 @@ class TourOptimizer:
                 # Also ensure that if both are selected, they have different positions
                 self.model += ~both_selected | (self.p[i] != self.p[j])
                 
-                # And ensure that consecutive venues respect travel times
+                # Add travel time constraints for consecutive venues
                 for slot_idx, slot_time in enumerate(self.time_slots):
                     # If i starts at this slot
                     i_starts_at_slot = (self.t[i] == slot_idx)
-                    if i_starts_at_slot:
-                        # Get travel time from i to j
-                        travel_key = (
-                            self.venues[i],
-                            self.venues[j],
-                            slot_time,
-                            self.day
+                    
+                    # Get travel time from i to j at this time
+                    travel_key = (
+                        self.venues[i],
+                        self.venues[j],
+                        slot_time,
+                        self.day
+                    )
+                    if travel_key in self.travel_times:
+                        travel_time = self.travel_times[travel_key]
+                        # Convert minutes to 30-min slots (round up)
+                        travel_slots = (travel_time + 29) // 30
+                        
+                        # If j follows i, ensure enough time for travel
+                        is_consecutive = (self.p[j] == self.p[i] + 1)
+                        
+                        # If i is selected, j follows i, and i starts at slot_idx,
+                        # then j must start after i ends plus travel time
+                        self.model += ~(
+                            both_selected & 
+                            is_consecutive & 
+                            i_starts_at_slot
+                        ) | (
+                            self.t[j] >= self.t[i] + dwell_i + travel_slots
                         )
-                        if travel_key in self.travel_times:
-                            travel_time = self.travel_times[travel_key]
-                            # Convert minutes to 30-min slots (round up)
-                            travel_slots = (travel_time + 29) // 30
-                            
-                            # If j follows i, ensure enough time for travel
-                            is_consecutive = (
-                                (self.p[j] == self.p[i] + 1)
-                            )
-                            self.model += ~(
-                                both_selected & 
-                                i_starts_at_slot & 
-                                is_consecutive
-                            ) | (
-                                self.t[j] >= 
-                                self.t[i] + dwell_i + travel_slots
-                            )
     
     def _set_objective(self):
         """Set the multi-objective optimization function.
@@ -537,27 +524,9 @@ class TourOptimizer:
         return None
     
     def _format_solution(self) -> Dict:
-        """Format the solution into a readable dictionary.
+        """Format the solution into a readable dictionary."""
+        logger = logging.getLogger(__name__)
         
-        This method takes the raw solution values and formats them into a
-        user-friendly dictionary containing:
-        - selected_venues: List of selected venues in visit order
-        - start_times: Dict mapping venue to start time
-        - metrics: Dict of optimization metrics (travel time, crowd level)
-        - schedule: List of dicts with detailed timing for each visit
-        - solver_stats: Statistics about the solving process
-        
-        The schedule includes for each visit:
-        - venue: Name of the venue
-        - start_time: Start time in HH:MM format
-        - end_time: End time in HH:MM format
-        - dwell_time_hours: Time spent at venue
-        - crowd_level_avg: Average crowd level during visit
-        - travel_time_to_next: Travel time to next venue (if any)
-        
-        Returns:
-            Dict containing the formatted solution
-        """
         # Get solution values
         x_val = [bool(self.x[i].value()) for i in range(self.n_venues)]
         t_val = [int(self.t[i].value()) for i in range(self.n_venues)]
@@ -573,14 +542,123 @@ class TourOptimizer:
         total_travel_time = 0
         total_crowd_level = 0
         
+        # Track the current time slot to ensure travel times are respected
+        current_time_slot = None
+        
+        logger.info("=== Detailed Schedule Validation ===")
+        
         for idx, venue_idx in enumerate(ordered_indices):
             venue = self.venues[venue_idx]
-            start_slot = t_val[venue_idx]
-            start_time = self.time_slots[start_slot]
+            logger.info(f"\nProcessing venue: {venue}")
+            
+            # Get the solver's assigned start slot
+            solver_start_slot = t_val[venue_idx]
+            logger.info(f"Solver assigned start slot: {solver_start_slot} ({self.time_slots[solver_start_slot]})")
+            
+            # Get valid slots for this venue
+            valid_slots = self.venue_open_slots.get((venue, self.day), [])
+            if valid_slots:
+                opening_slot = min(valid_slots)
+                closing_slot = max(valid_slots)
+                logger.info(f"Valid slots: opens={self.time_slots[opening_slot]}, closes={self.time_slots[closing_slot]}")
+            else:
+                logger.warning(f"No valid slots found for {venue} on {self.day}")
+            
+            # For the first venue, use the solver's assigned start slot
+            if idx == 0:
+                start_slot = solver_start_slot
+                current_time_slot = start_slot
+                logger.info("First venue - using solver's start slot")
+            else:
+                # For subsequent venues, ensure travel time from previous venue is respected
+                prev_venue_idx = ordered_indices[idx-1]
+                prev_venue = self.venues[prev_venue_idx]
+                prev_end_slot = t_val[prev_venue_idx] + self.dwell_slots[prev_venue]
+                
+                # Get travel time from previous venue to this venue
+                prev_end_time = self.time_slots[min(prev_end_slot, self.n_slots - 1)]
+                travel_key = (prev_venue, venue, prev_end_time, self.day)
+                
+                logger.info(f"Previous venue {prev_venue} ends at: {prev_end_time}")
+                
+                if travel_key in self.travel_times:
+                    travel_time = self.travel_times[travel_key]
+                    # Convert travel time to slots (round up)
+                    travel_slots = (travel_time + 29) // 30
+                    logger.info(f"Travel time from {prev_venue}: {travel_time} minutes ({travel_slots} slots)")
+                    
+                    # Calculate the earliest possible start slot after travel
+                    earliest_start_after_travel = prev_end_slot + travel_slots
+                    
+                    # Ensure we don't exceed available time slots
+                    if earliest_start_after_travel >= len(self.time_slots):
+                        logger.error(
+                            f"Cannot schedule {venue} after {prev_venue} - "
+                            f"would exceed available time slots"
+                        )
+                        continue
+                    
+                    logger.info(
+                        f"Earliest possible start after travel: "
+                        f"{self.time_slots[earliest_start_after_travel]}"
+                    )
+                    
+                    # Use the maximum of the solver's assigned start slot 
+                    # and the earliest possible start
+                    start_slot = max(solver_start_slot, earliest_start_after_travel)
+                    
+                    # Verify start_slot is valid
+                    if start_slot >= len(self.time_slots):
+                        logger.error(
+                            f"Cannot schedule {venue} - start time would be "
+                            f"after available time slots"
+                        )
+                        continue
+                else:
+                    # If no travel time data, use solver's assigned start slot
+                    # but ensure it's after previous venue ends
+                    start_slot = max(solver_start_slot, prev_end_slot + 1)
+                
+                # Update current time slot
+                current_time_slot = start_slot
+            
+            # Check if the venue is still open at the adjusted start time
             dwell_slots = self.dwell_slots[venue]
+            end_slot = start_slot + dwell_slots
+            
+            # Validate end_slot is within bounds
+            if end_slot >= len(self.time_slots):
+                logger.error(f"Visit to {venue} would end after available time slots. Start: {self.time_slots[start_slot]}, Duration: {self.dwell_times[venue]} hours")
+                continue
+                
+            logger.info(f"Final scheduled time: {self.time_slots[start_slot]} - {self.time_slots[end_slot]}")
+            logger.info(f"Dwell time: {self.dwell_times[venue]} hours ({dwell_slots} slots)")
+            
+            # Check if the entire visit is within valid slots
+            visit_slots = range(start_slot, end_slot)
+            is_valid_visit = all(slot in valid_slots for slot in visit_slots)
+            
+            if not is_valid_visit:
+                invalid_slots = [slot for slot in visit_slots if slot not in valid_slots]
+                logger.error(f"Invalid visit slots: {[self.time_slots[slot] for slot in invalid_slots]}")
+                
+                # Find the venue's closing time
+                if valid_slots:
+                    closing_slot = max(valid_slots)
+                    closing_time = self.time_slots[closing_slot]
+                    logger.error(f"Visit extends past closing time ({closing_time})")
+                    warning = f"Warning: Visit extends past closing time ({closing_time})"
+                else:
+                    logger.error(f"Venue may be closed on {self.day}")
+                    warning = "Warning: Venue may be closed on this day"
+            else:
+                warning = None
+                logger.info("Visit time is valid within operating hours")
+            
+            # Get the start time string
+            start_time = self.time_slots[min(start_slot, self.n_slots - 1)]
             
             # Calculate end time
-            end_slot = start_slot + dwell_slots
             end_time = self.time_slots[min(end_slot, self.n_slots - 1)]
             
             # Calculate crowd levels during visit
@@ -616,7 +694,8 @@ class TourOptimizer:
                 "end_time": end_time,
                 "dwell_time_hours": self.dwell_times[venue],
                 "crowd_level_avg": avg_crowd,
-                "travel_time_to_next": travel_time
+                "travel_time_to_next": travel_time,
+                "warning": warning
             }
             schedule.append(visit)
         
@@ -636,12 +715,16 @@ class TourOptimizer:
             )
         }
         
+        logger.info("\n=== Schedule Validation Complete ===")
+        
+        # Create a mapping of venues to their adjusted start times
+        adjusted_start_times = {
+            visit["venue"]: visit["start_time"] for visit in schedule
+        }
+        
         return {
             "selected_venues": selected_venues,
-            "start_times": {
-                self.venues[i]: self.time_slots[t_val[i]]
-                for i in selected_indices
-            },
+            "start_times": adjusted_start_times,
             "metrics": metrics,
             "schedule": schedule
         }
@@ -666,5 +749,21 @@ class TourOptimizer:
         
         # Re-set the objective with the new weights
         self._set_objective()
+        
+        return self 
+
+    def set_min_venues(self, min_venues: int) -> 'TourOptimizer':
+        """Set the minimum number of venues to visit.
+        
+        Args:
+            min_venues: Minimum number of venues to visit (must be >= 1)
+            
+        Returns:
+            Self for method chaining
+        """
+        self.min_venues = max(1, min_venues)  # Ensure at least 1
+        
+        # Rebuild the entire model with the new minimum
+        self._add_constraints()
         
         return self 

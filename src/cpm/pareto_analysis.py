@@ -253,6 +253,9 @@ def run_model_with_weights(
         day=day
     )
     
+    # Set minimum number of venues to visit
+    optimizer.set_min_venues(3)
+    
     # Set custom weights for the objective function
     # Note: w_venues is already negative to maximize venues
     optimizer.w_travel = w_travel
