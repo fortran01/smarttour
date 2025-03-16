@@ -426,18 +426,18 @@ async function main() {
   const mondayOnlyVenues = [
     'cn_tower',
     'casa_loma',
-    'art_gallery_of_ontario',
     'distillery_historic_district',
     'hockey_hall_of_fame',
-    // 'little_canada',
-    // 'ripleys_aquarium_of_canada',
-    // 'st_lawrence_market',
-    // 'toronto_zoo',
+    'little_canada',
+    'ripleys_aquarium_of_canada',
+    'toronto_zoo'
   ];
 
   // ROM is closed on Mondays, so we'll use Tuesday's data for it
   const tuesdayOnlyVenues = [
     'royal_ontario_museum',
+    'art_gallery_of_ontario',
+    'st_lawrence_market',
   ];
 
   const allVenues = [...fullDataVenues, ...mondayOnlyVenues, ...tuesdayOnlyVenues];
