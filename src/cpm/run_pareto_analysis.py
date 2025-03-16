@@ -6,12 +6,14 @@ generating multiple solutions with different weight combinations, identifying
 Pareto-optimal solutions, and visualizing the Pareto front.
 
 Usage:
-    python -m src.cpm.run_pareto_analysis [--day DAY] [--points POINTS] [--output DIR]
+    python -m src.cpm.run_pareto_analysis [--day DAY] [--points POINTS] 
+    [--output DIR] [--workers N]
 
 Arguments:
     --day DAY        Day of the week for the tour (default: Tuesday)
     --points POINTS  Number of points for each weight (default: 5)
     --output DIR     Directory to save output files (default: pareto_results)
+    --workers N      Number of parallel workers (default: use all CPU cores)
 """
 
 import argparse
@@ -46,6 +48,12 @@ def parse_args():
         default="pareto_results",
         help="Directory to save output files (default: pareto_results)"
     )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=None,
+        help="Number of parallel workers (default: use all CPU cores)"
+    )
     return parser.parse_args()
 
 
@@ -57,9 +65,13 @@ def main():
     output_dir = Path(args.output)
     output_dir.mkdir(exist_ok=True, parents=True)
     
+    workers_info = (
+        f"with {args.workers} workers" if args.workers else "with all CPU cores"
+    )
+    
     print(
         f"Running Pareto analysis for {args.day} with {args.points} "
-        f"points per weight"
+        f"points per weight {workers_info}"
     )
     print(f"Output will be saved to {output_dir.absolute()}")
     
@@ -67,7 +79,8 @@ def main():
     all_solutions, pareto_solutions = run_pareto_analysis(
         day=args.day,
         n_weight_points=args.points,
-        output_dir=str(output_dir)
+        output_dir=str(output_dir),
+        max_workers=args.workers
     )
     
     print("\nAnalysis complete!")

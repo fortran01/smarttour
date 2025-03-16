@@ -336,6 +336,21 @@ The optimizer has created an efficient schedule that:
 
 Crowd levels are on a scale from -2 (very quiet) to +2 (very busy), with 0 representing average crowds.
 
+You can customize the optimization run with command-line arguments:
+
+```bash
+# Run with 8 CPU cores and a 5-minute time limit for Wednesday
+python -m src.cpm.optimize_tour --cores 8 --time-limit 300 --day Wednesday
+
+# See all available options
+python -m src.cpm.optimize_tour --help
+```
+
+Available options:
+- `--cores`: Number of CPU cores to use for parallel solving (default: 4)
+- `--time-limit`: Time limit in seconds for the solver (default: 300)
+- `--day`: Day of the week for the tour (default: Tuesday)
+
 #### Pareto Optimality Analysis
 
 The Pareto Optimality Analysis helps understand the trade-offs between competing objectives in the tour optimization problem:
@@ -355,6 +370,12 @@ python -m src.cpm.run_pareto_analysis
 # Run with custom settings
 python -m src.cpm.run_pareto_analysis --day Friday --points 3 --output pareto_results_friday
 ```
+
+Available options:
+- `--day`: Day of the week for the tour (default: Tuesday)
+- `--points`: Number of points for each weight (default: 5)
+- `--output`: Directory to save output files (default: pareto_results)
+- `--workers`: Number of parallel workers (default: use all CPU cores)
 
 **Outputs:**
 

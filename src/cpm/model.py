@@ -21,6 +21,7 @@ The model uses 30-minute time slots and supports flexible tour start/end times.
 from typing import Dict, List, Optional, Tuple, Literal
 from cpmpy import Model
 from cpmpy.expressions.variables import IntVar, BoolVar
+from cpmpy.solvers import CPM_ortools
 
 # Type alias for days of the week
 DayOfWeek = Literal[
@@ -51,6 +52,10 @@ class TourOptimizer:
     1. t[i]: Integer variables for start time slots of each venue
     2. p[i]: Integer variables for position in sequence (0 = not visited)
     3. x[i]: Binary variables for venue selection (1 = selected)
+    
+    The solver supports multi-threading to improve performance on multi-core
+    systems. The number of cores to use can be specified when calling the
+    solve() method.
     
     Attributes:
         venues: List of venue names to consider
@@ -497,7 +502,7 @@ class TourOptimizer:
         # - Number of venues is normalized by max possible venues
         normalized_travel = total_travel_time / 30
         normalized_crowd = total_crowd_level / 100
-        normalized_venues = n_visited / self.n_venues  # Normalize by total possible venues
+        normalized_venues = (n_visited / self.n_venues)  # Normalize by total possible venues
         
         objective = (
             self.w_travel * normalized_travel +
@@ -507,8 +512,12 @@ class TourOptimizer:
         
         self.model.minimize(objective)
     
-    def solve(self) -> Optional[Dict]:
+    def solve(self, num_cores: int = 4, time_limit: int = 300) -> Optional[Dict]:
         """Solve the model and return the solution if found.
+        
+        Args:
+            num_cores: Number of CPU cores to use for parallel solving (default: 4)
+            time_limit: Time limit in seconds for the solver (default: 300)
         
         Returns:
             Dict containing the solution details if found:
@@ -518,8 +527,12 @@ class TourOptimizer:
             - schedule: List of dicts with detailed timing
             Returns None if no solution is found.
         """
-        if self.model.solve():
-            # TODO: Format solution
+        # Create the solver instance with our model
+        self.solver = CPM_ortools(self.model)
+        
+        # Set solver parameters for multi-threading and time limit
+        if self.solver.solve(num_search_workers=num_cores, 
+                        time_limit=time_limit):
             return self._format_solution()
         return None
     
@@ -532,6 +545,7 @@ class TourOptimizer:
         - start_times: Dict mapping venue to start time
         - metrics: Dict of optimization metrics (travel time, crowd level)
         - schedule: List of dicts with detailed timing for each visit
+        - solver_stats: Statistics about the solving process
         
         The schedule includes for each visit:
         - venue: Name of the venue
@@ -630,4 +644,27 @@ class TourOptimizer:
             },
             "metrics": metrics,
             "schedule": schedule
-        } 
+        }
+
+    def set_objective_weights(
+        self, 
+        travel_weight: float = 1.0, 
+        crowd_weight: float = 0.5, 
+        venues_weight: float = -20.0
+    ):
+        """Set the weights for the multi-objective optimization function.
+        
+        Args:
+            travel_weight: Weight for travel time minimization (default: 1.0)
+            crowd_weight: Weight for crowd level minimization (default: 0.5)
+            venues_weight: Weight for venue count maximization (default: -20.0,
+                negative to maximize)
+        """
+        self.w_travel = travel_weight
+        self.w_crowd = crowd_weight
+        self.w_venues = venues_weight
+        
+        # Re-set the objective with the new weights
+        self._set_objective()
+        
+        return self 

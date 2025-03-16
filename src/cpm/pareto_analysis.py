@@ -12,13 +12,13 @@ The analysis focuses on three objectives:
 The Pareto front shows the trade-offs between these competing objectives.
 """
 
-import itertools
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from typing import Dict, List, Tuple, Optional
 from pathlib import Path
 import pandas as pd
+import concurrent.futures
 from .model import TourOptimizer
 from .data_loader import DataLoader
 from .optimize_tour import generate_time_slots
@@ -34,24 +34,23 @@ def generate_weight_combinations(
     
     Returns:
         List of (w_travel, w_crowd, w_venues) weight combinations
+        Note: w_venues is negative to maximize number of venues
     """
-    # Generate weights between 0.1 and 1.0
-    weights = np.linspace(0.1, 1.0, n_points)
+    # Generate positive weights between 0.1 and 1.0 for travel and crowd
+    positive_weights = np.linspace(0.1, 1.0, n_points)
+    
+    # Generate negative weights between -20 and -40 for venues
+    # We use negative weights because we want to maximize venues
+    negative_weights = np.linspace(-1, -20, n_points)
     
     # Generate all combinations of weights
-    combinations = list(itertools.product(weights, weights, weights))
+    combinations = []
+    for w_travel in positive_weights:
+        for w_crowd in positive_weights:
+            for w_venues in negative_weights:
+                combinations.append((w_travel, w_crowd, w_venues))
     
-    # Normalize weights so they sum to 1
-    normalized_combinations = []
-    for w_travel, w_crowd, w_venues in combinations:
-        total = w_travel + w_crowd + w_venues
-        normalized_combinations.append((
-            w_travel / total,
-            w_crowd / total,
-            w_venues / total
-        ))
-    
-    return normalized_combinations
+    return combinations
 
 
 def is_pareto_optimal(
@@ -200,43 +199,123 @@ def visualize_pareto_front(
 
 
 def run_model_with_weights(
-    optimizer: TourOptimizer,
+    data_loader: DataLoader,
+    venues: List[str],
+    time_slots: List[str],
+    day: str,
     w_travel: float,
     w_crowd: float,
-    w_venues: float
+    w_venues: float,
+    i: Optional[int] = None,
+    total: Optional[int] = None
 ) -> Optional[Dict]:
     """Run the model with specific weights for the objective function.
     
     Args:
-        optimizer: TourOptimizer instance
+        data_loader: DataLoader instance
+        venues: List of venue names
+        time_slots: List of time slots
+        day: Day of the week
         w_travel: Weight for travel time
         w_crowd: Weight for crowd levels
         w_venues: Weight for number of venues (negative to maximize)
+        i: Optional index for progress reporting
+        total: Optional total count for progress reporting
     
     Returns:
         Solution dictionary if found, None otherwise
     """
+    # Print progress if index is provided
+    if i is not None and total is not None:
+        print(
+            f"Running model with weights ({w_travel:.2f}, {w_crowd:.2f}, "
+            f"{w_venues:.2f}) [{i+1}/{total}]"
+        )
+    
+    # Load all required data
+    (
+        venue_data,
+        dwell_times,
+        travel_times,
+        crowd_levels,
+        venue_open_slots
+    ) = data_loader.load_all(time_slots)
+    
+    # Create a new optimizer instance for this run
+    optimizer = TourOptimizer(
+        venues=venues,
+        dwell_times=dwell_times,
+        time_slots=time_slots,
+        travel_times=travel_times,
+        crowd_levels=crowd_levels,
+        venue_open_slots=venue_open_slots,
+        tour_start_time="09:00",
+        tour_end_time="22:30",
+        day=day
+    )
+    
     # Set custom weights for the objective function
-    # Note: w_venues should be negative to maximize
+    # Note: w_venues is already negative to maximize venues
     optimizer.w_travel = w_travel
     optimizer.w_crowd = w_crowd
-    optimizer.w_venues = -abs(w_venues) * 20  # Scale venues weight and ensure it's negative
+    # Use w_venues directly since it's already negative
+    optimizer.w_venues = w_venues
     
     # Solve the model
-    return optimizer.solve()
+    solution = optimizer.solve()
+    
+    # Add weights to solution for reference if solution exists
+    if solution:
+        solution["weights"] = {
+            "w_travel": w_travel,
+            "w_crowd": w_crowd,
+            "w_venues": w_venues
+        }
+    
+    return solution
+
+
+# Worker function for parallel execution
+def worker_run_model(args):
+    """Worker function for parallel execution of run_model_with_weights.
+    
+    Args:
+        args: Tuple containing (i, weights, data_loader, venues, time_slots, 
+              day, total)
+    
+    Returns:
+        Result from run_model_with_weights
+    """
+    i, weights, data_loader, venues, time_slots, day, total = args
+    w_travel, w_crowd, w_venues = weights
+    return run_model_with_weights(
+        data_loader=data_loader,
+        venues=venues,
+        time_slots=time_slots,
+        day=day,
+        w_travel=w_travel,
+        w_crowd=w_crowd,
+        w_venues=w_venues,
+        i=i,
+        total=total
+    )
 
 
 def run_pareto_analysis(
     day: str = "Tuesday",
-    n_weight_points: int = 5,
-    output_dir: Optional[str] = None
+    n_weight_points: int = 4,
+    output_dir: Optional[str] = None,
+    max_workers: Optional[int] = None
 ) -> Tuple[List[Dict], List[Dict]]:
     """Run a full Pareto analysis for the tour optimization problem.
     
     Args:
         day: Day of the week for the tour
-        n_weight_points: Number of points to generate for each weight
+        n_weight_points: Number of points for each weight 
+                         (generates n_weight_points^3 combinations)
         output_dir: Directory to save output files (optional)
+        max_workers: Maximum number of parallel workers (default: None, which 
+                     uses the number of processors on the machine)
     
     Returns:
         Tuple of (all_solutions, pareto_solutions)
@@ -250,47 +329,38 @@ def run_pareto_analysis(
     # Generate time slots
     time_slots = generate_time_slots()
     
-    # Load all required data
-    (
-        venue_data,
-        dwell_times,
-        travel_times,
-        crowd_levels,
-        venue_open_slots
-    ) = data_loader.load_all(time_slots)
+    # Load venue data to get list of venues
+    venue_data, dwell_times, _, _, _ = data_loader.load_all(time_slots)
     
     # Get list of venues
     venues = list(dwell_times.keys())
     
-    # Create optimizer
-    optimizer = TourOptimizer(
-        venues=venues,
-        dwell_times=dwell_times,
-        time_slots=time_slots,
-        travel_times=travel_times,
-        crowd_levels=crowd_levels,
-        venue_open_slots=venue_open_slots,
-        tour_start_time="09:00",
-        tour_end_time="22:30",
-        day=day
-    )
-    
     # Generate weight combinations
     weight_combinations = generate_weight_combinations(n_weight_points)
     
-    # Run model with each weight combination
+    print(
+        f"Running {len(weight_combinations)} weight combinations "
+        f"with up to {max_workers} parallel workers"
+    )
+    
+    # Run model with each weight combination in parallel
     all_solutions = []
-    for i, (w_travel, w_crowd, w_venues) in enumerate(weight_combinations):
-        print(f"Running model with weights ({w_travel:.2f}, {w_crowd:.2f}, {w_venues:.2f}) [{i+1}/{len(weight_combinations)}]")
-        solution = run_model_with_weights(optimizer, w_travel, w_crowd, w_venues)
-        if solution:
-            # Add weights to solution for reference
-            solution["weights"] = {
-                "w_travel": w_travel,
-                "w_crowd": w_crowd,
-                "w_venues": w_venues
-            }
-            all_solutions.append(solution)
+    
+    # Use ProcessPoolExecutor for CPU-bound tasks
+    with concurrent.futures.ProcessPoolExecutor(
+        max_workers=max_workers
+    ) as executor:
+        # Prepare arguments for each worker
+        worker_args = [
+            (i, weights, data_loader, venues, time_slots, day, 
+             len(weight_combinations))
+            for i, weights in enumerate(weight_combinations)
+        ]
+        
+        # Submit all tasks and collect results
+        for solution in executor.map(worker_run_model, worker_args):
+            if solution:
+                all_solutions.append(solution)
     
     # Identify Pareto-optimal solutions
     pareto_solutions = identify_pareto_optimal_solutions(all_solutions)
@@ -307,8 +377,8 @@ def run_pareto_analysis(
     
     # Save solutions to CSV
     if output_dir:
-        output_dir = Path(output_dir)
-        output_dir.mkdir(exist_ok=True)
+        output_dir_path = Path(output_dir)
+        output_dir_path.mkdir(exist_ok=True)
         
         # Create DataFrame for all solutions
         solution_data = []
@@ -326,11 +396,12 @@ def run_pareto_analysis(
             })
         
         df = pd.DataFrame(solution_data)
-        df.to_csv(output_dir / "pareto_solutions.csv", index=False)
+        df.to_csv(output_dir_path / "pareto_solutions.csv", index=False)
     
     return all_solutions, pareto_solutions
 
 
 if __name__ == "__main__":
-    # Run Pareto analysis
-    run_pareto_analysis(output_dir="pareto_results") 
+    # Run Pareto analysis with parallel execution
+    # Use 4 workers (or None to use all available cores)
+    run_pareto_analysis(output_dir="pareto_results", max_workers=4) 

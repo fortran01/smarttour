@@ -4,6 +4,7 @@ This script demonstrates how to use the TourOptimizer model with real data to
 generate an optimized tour itinerary for Toronto attractions.
 """
 
+import argparse
 from pathlib import Path
 from typing import List
 from .model import TourOptimizer
@@ -21,6 +22,35 @@ def generate_time_slots() -> List[str]:
 
 def main():
     """Main function to run the tour optimization."""
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(
+        description="Optimize a tour itinerary using constraint programming"
+    )
+    parser.add_argument(
+        "--cores", 
+        type=int, 
+        default=4,
+        help="Number of CPU cores to use for parallel solving (default: 4)"
+    )
+    parser.add_argument(
+        "--time-limit", 
+        type=int, 
+        default=300,
+        help="Time limit in seconds for the solver (default: 300)"
+    )
+    parser.add_argument(
+        "--day", 
+        type=str, 
+        # default="Monday",
+        default="Tuesday",
+        choices=[
+            "Monday", "Tuesday", "Wednesday", "Thursday", 
+            "Friday", "Saturday", "Sunday"
+        ],
+        help="Day of the week for the tour (default: Monday)"
+    )
+    args = parser.parse_args()
+    
     # Set up paths
     data_dir = Path(__file__).parent.parent.parent / "data"
     
@@ -42,7 +72,7 @@ def main():
     # Get list of venues
     venues = list(dwell_times.keys())
     
-    # Create optimizer for a Monday tour
+    # Create optimizer for the specified day
     optimizer = TourOptimizer(
         venues=venues,
         dwell_times=dwell_times,
@@ -52,17 +82,24 @@ def main():
         venue_open_slots=venue_open_slots,
         tour_start_time="09:00",
         tour_end_time="22:00",
-        day="Monday"  # Type hint will ensure this is a valid DayOfWeek
+        day=args.day  # Use the day from command line arguments
     )
     
-    # Set weights to match a 3-venue Pareto-optimal solution from the CSV
-    # Using the line: 0,0.0,3,0.7333333333333334,0.13333333333333333,0.13333333333333333,True
-    optimizer.w_travel = 0.73  # High weight on travel time
-    optimizer.w_crowd = 0.13   # Low weight on crowd levels
-    optimizer.w_venues = -0.13 # Low weight on venues (negative to maximize)
+    # Set custom objective weights
+    optimizer.set_objective_weights(
+        travel_weight=0.1,
+        crowd_weight=0.1,
+        venues_weight=-20
+    )
     
-    # Solve the optimization problem
-    solution = optimizer.solve()
+    print(f"Optimizing tour for {args.day} using {args.cores} CPU cores...")
+    print(f"Solver time limit: {args.time_limit} seconds")
+    
+    # Solve the optimization problem with multi-threading
+    solution = optimizer.solve(
+        num_cores=args.cores,
+        time_limit=args.time_limit
+    )
     
     if solution:
         print("\nOptimized Tour Schedule:")
