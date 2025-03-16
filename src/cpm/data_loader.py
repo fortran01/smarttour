@@ -9,7 +9,7 @@ This module provides functions to load and validate venue data, including:
 import json
 import csv
 from pathlib import Path
-from typing import Dict, List, Tuple, cast
+from typing import Dict, List, Tuple, cast, Optional
 from .model import DayOfWeek, DAY_TO_INT
 
 
@@ -38,12 +38,21 @@ class DataLoader:
         for json_file in self.data_dir.glob("*.json"):
             if json_file.stem == "all_attractions":
                 continue
-            # Convert filename to proper venue name (e.g., "cn_tower" -> "CN Tower")
-            venue_name = json_file.stem.replace("_", " ").title()
-            if venue_name == "Cn Tower":
-                venue_name = "CN Tower"
+            
+            # Load the JSON data
             with open(json_file) as f:
-                venues[venue_name] = json.load(f)
+                venue_data = json.load(f)
+            
+            # Use the actual venue name from the JSON data if available
+            if "venue_info" in venue_data and "venue_name" in venue_data["venue_info"]:
+                venue_name = venue_data["venue_info"]["venue_name"]
+            else:
+                # Fallback to deriving from filename if venue_name not in JSON
+                venue_name = json_file.stem.replace("_", " ").title()
+                if venue_name == "Cn Tower":
+                    venue_name = "CN Tower"
+            
+            venues[venue_name] = venue_data
         return venues
     
     def load_dwell_times(self) -> Dict[str, float]:
@@ -176,31 +185,92 @@ class DataLoader:
         def hour_to_slot_index(hour: int) -> int:
             return (hour - 9) * 2  # 9:00 is slot 0, each hour is 2 slots
         
+        # Helper function to safely convert opening/closing hours to int
+        def safe_hour_convert(hour_value) -> Optional[int]:
+            """Safely convert hour value to int, handling various formats."""
+            if hour_value is None:
+                return None
+            if isinstance(hour_value, int):
+                return hour_value
+            if isinstance(hour_value, str):
+                if hour_value.lower() == "closed":
+                    return None
+                try:
+                    # Try to convert string to int
+                    return int(hour_value)
+                except ValueError:
+                    print(f"Warning: Could not convert hour value '{hour_value}' to int")
+                    return None
+            print(f"Warning: Unexpected hour value type: {type(hour_value)}, value: {hour_value}")
+            return None
+        
         for venue_name, data in venue_data.items():
+            print(f"Processing venue: {venue_name}")
+            
             for day_data in data["analysis"]:
-                day_int = day_data["day_info"]["day_int"]
+                day_info = day_data["day_info"]
+                day_int = day_info["day_int"]
                 day_name = list(DAY_TO_INT.keys())[day_int]
                 day = cast(DayOfWeek, day_name)
                 
+                print(f"  Processing day: {day_name}")
+                
+                # Check if venue is closed on this day
+                venue_open = day_info.get("venue_open")
+                if isinstance(venue_open, str) and venue_open.lower() == "closed":
+                    print(f"  {venue_name} is closed on {day_name}")
+                    slots[(venue_name, day)] = []
+                    continue
+                
                 # Get operating hours for this day
-                open_close = day_data["day_info"]["venue_open_close_v2"]["24h"]
-                valid_slots: List[int] = []
-                
-                for period in open_close:
-                    opens = period["opens"]  # Opening hour
-                    closes = period["closes"]  # Closing hour
+                try:
+                    open_close = day_info["venue_open_close_v2"]["24h"]
+                    print(f"  Open/close data: {open_close}")
                     
-                    # Convert hours to slot indices
-                    start_slot = max(0, hour_to_slot_index(opens))
-                    end_slot = min(
-                        len(time_slots),
-                        hour_to_slot_index(closes)
-                    )
+                    valid_slots: List[int] = []
                     
-                    # Add all valid slots for this period
-                    valid_slots.extend(range(start_slot, end_slot))
+                    if not open_close:
+                        print(f"  No opening hours data for {venue_name} on {day_name}")
+                        # Check if we have legacy format data
+                        legacy_open = safe_hour_convert(day_info.get("venue_open"))
+                        legacy_close = safe_hour_convert(day_info.get("venue_closed"))
+                        
+                        if legacy_open is not None and legacy_close is not None:
+                            print(f"  Using legacy format: opens={legacy_open}, closes={legacy_close}")
+                            # Convert hours to slot indices
+                            start_slot = max(0, hour_to_slot_index(legacy_open))
+                            end_slot = min(len(time_slots), hour_to_slot_index(legacy_close))
+                            
+                            # Add all valid slots for this period
+                            valid_slots.extend(range(start_slot, end_slot))
+                    else:
+                        for period in open_close:
+                            opens = safe_hour_convert(period.get("opens"))
+                            closes = safe_hour_convert(period.get("closes"))
+                            
+                            if opens is None or closes is None:
+                                print(f"  Invalid opening hours for {venue_name} on {day_name}: opens={opens}, closes={closes}")
+                                continue
+                            
+                            print(f"  Valid hours: opens={opens}, closes={closes}")
+                            
+                            # Convert hours to slot indices
+                            start_slot = max(0, hour_to_slot_index(opens))
+                            end_slot = min(len(time_slots), hour_to_slot_index(closes))
+                            
+                            # Add all valid slots for this period
+                            valid_slots.extend(range(start_slot, end_slot))
+                    
+                    slots[(venue_name, day)] = sorted(list(set(valid_slots)))
+                    print(f"  Added {len(slots[(venue_name, day)])} valid slots for {venue_name} on {day_name}")
                 
-                slots[(venue_name, day)] = sorted(list(set(valid_slots)))
+                except KeyError as e:
+                    print(f"  Error processing {venue_name} on {day_name}: {e}")
+                    # Set empty list as fallback
+                    slots[(venue_name, day)] = []
+                except Exception as e:
+                    print(f"  Unexpected error processing {venue_name} on {day_name}: {e}")
+                    slots[(venue_name, day)] = []
         
         return slots
     
@@ -227,16 +297,30 @@ class DataLoader:
             - crowd_levels: Crowd levels by venue, time and day
             - operating_hours: Valid time slots by venue and day
         """
-        venue_data = self.load_venue_data()
+        # First load dwell times to know which venues to include
         dwell_times = self.load_dwell_times()
+        
+        # Then load venue data and filter to only include venues with dwell times
+        all_venue_data = self.load_venue_data()
+        venue_data = {name: data for name, data in all_venue_data.items() 
+                     if name in dwell_times}
+        
+        # Load remaining data
         travel_times = self.load_travel_times(time_slots)
         crowd_levels = self.extract_crowd_levels(venue_data)
         operating_hours = self.extract_operating_hours(venue_data, time_slots)
         
+        # Filter travel times to only include venues with dwell times
+        filtered_travel_times = {}
+        for key, value in travel_times.items():
+            from_venue, to_venue, time_slot, day = key
+            if from_venue in dwell_times and to_venue in dwell_times:
+                filtered_travel_times[key] = value
+        
         return (
             venue_data,
             dwell_times,
-            travel_times,
+            filtered_travel_times,
             crowd_levels,
             operating_hours
         ) 
