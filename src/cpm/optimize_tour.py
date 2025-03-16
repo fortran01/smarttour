@@ -11,9 +11,9 @@ from .data_loader import DataLoader
 
 
 def generate_time_slots() -> List[str]:
-    """Generate time slots from 9:00 AM to 9:30 PM in 30-min intervals."""
+    """Generate time slots from 9:00 AM to 10:30 PM in 30-min intervals."""
     slots = []
-    for hour in range(9, 22):  # 9:00 AM to 9:30 PM
+    for hour in range(9, 23):  # 9:00 AM to 10:30 PM
         slots.append(f"{hour:02d}:00")
         slots.append(f"{hour:02d}:30")
     return slots
@@ -42,7 +42,7 @@ def main():
     # Get list of venues
     venues = list(dwell_times.keys())
     
-    # Create optimizer for a Tuesday tour (ROM is closed on Mondays)
+    # Create optimizer for a Monday tour
     optimizer = TourOptimizer(
         venues=venues,
         dwell_times=dwell_times,
@@ -51,9 +51,15 @@ def main():
         crowd_levels=crowd_levels,
         venue_open_slots=venue_open_slots,
         tour_start_time="09:00",
-        tour_end_time="21:00",
-        day="Tuesday"  # Type hint will ensure this is a valid DayOfWeek
+        tour_end_time="22:00",
+        day="Monday"  # Type hint will ensure this is a valid DayOfWeek
     )
+    
+    # Set weights to match a 3-venue Pareto-optimal solution from the CSV
+    # Using the line: 0,0.0,3,0.7333333333333334,0.13333333333333333,0.13333333333333333,True
+    optimizer.w_travel = 0.73  # High weight on travel time
+    optimizer.w_crowd = 0.13   # Low weight on crowd levels
+    optimizer.w_venues = -0.13 # Low weight on venues (negative to maximize)
     
     # Solve the optimization problem
     solution = optimizer.solve()

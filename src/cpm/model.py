@@ -287,9 +287,10 @@ class TourOptimizer:
         # First, count how many venues are selected
         n_selected = sum(self.x)
         
-        # Ensure all venues are selected for this test case
-        # This is a temporary constraint for the test
-        self.model += n_selected == self.n_venues
+        # Allow the optimizer to select any number of venues
+        # This enables skipping venues that are closed on the selected day
+        # We still want to visit at least one venue
+        self.model += n_selected >= 1
         
         # Then ensure positions are 1..n_selected
         for i in range(self.n_venues):

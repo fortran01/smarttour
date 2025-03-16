@@ -418,6 +418,13 @@ async function main() {
     'cn_tower',
     'casa_loma',
     'royal_ontario_museum',
+    'art_gallery_of_ontario',
+    'distillery_historic_district',
+    // 'hockey_hall_of_fame',
+    // 'little_canada',
+    // 'ripleys_aquarium_of_canada',
+    // 'st_lawrence_market',
+    // 'toronto_zoo',
   ];
 
   // Load all venue data

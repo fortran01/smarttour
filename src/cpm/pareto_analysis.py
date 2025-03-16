@@ -271,7 +271,7 @@ def run_pareto_analysis(
         crowd_levels=crowd_levels,
         venue_open_slots=venue_open_slots,
         tour_start_time="09:00",
-        tour_end_time="21:00",
+        tour_end_time="22:30",
         day=day
     )
     
