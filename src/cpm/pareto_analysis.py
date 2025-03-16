@@ -38,8 +38,7 @@ def generate_weight_combinations(
     """
     # Generate positive weights between 0.1 and 1.0 for travel and crowd
     positive_weights = np.linspace(0.1, 1.0, n_points)
-    
-    # Generate negative weights between -20 and -40 for venues
+
     # We use negative weights because we want to maximize venues
     negative_weights = np.linspace(-1, -20, n_points)
     
