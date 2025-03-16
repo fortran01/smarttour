@@ -412,24 +412,39 @@ async function calculateRoutesForVenuePair(
   return newRoutes;
 }
 
+// Store Monday's route data for reuse
+const mondayRouteCache = new Map<string, RouteData[]>();
+// Store Tuesday's route data for ROM
+const tuesdayROMRouteCache = new Map<string, RouteData[]>();
+
 async function main() {
-  // List of all venues
-  const venues = [
+  // Split venues into two groups: full data and Monday-only data
+  const fullDataVenues: string[] = [
+    // All venues moved to mondayOnlyVenues
+  ];
+
+  const mondayOnlyVenues = [
     'cn_tower',
     'casa_loma',
-    'royal_ontario_museum',
     'art_gallery_of_ontario',
     'distillery_historic_district',
-    // 'hockey_hall_of_fame',
+    'hockey_hall_of_fame',
     // 'little_canada',
     // 'ripleys_aquarium_of_canada',
     // 'st_lawrence_market',
     // 'toronto_zoo',
   ];
 
+  // ROM is closed on Mondays, so we'll use Tuesday's data for it
+  const tuesdayOnlyVenues = [
+    'royal_ontario_museum',
+  ];
+
+  const allVenues = [...fullDataVenues, ...mondayOnlyVenues, ...tuesdayOnlyVenues];
+
   // Load all venue data
   const venueData = new Map<string, VenueData>();
-  for (const venue of venues) {
+  for (const venue of allVenues) {
     venueData.set(venue, await loadVenueData(venue));
   }
 
@@ -461,10 +476,10 @@ async function main() {
     console.log(`\nProcessing routes for ${dayText}`);
     
     // Calculate routes between each pair of venues
-    for (let i = 0; i < venues.length; i++) {
-      for (let j = i + 1; j < venues.length; j++) {
-        const venue1Data = venueData.get(venues[i])!;
-        const venue2Data = venueData.get(venues[j])!;
+    for (let i = 0; i < allVenues.length; i++) {
+      for (let j = i + 1; j < allVenues.length; j++) {
+        const venue1Data = venueData.get(allVenues[i])!;
+        const venue2Data = venueData.get(allVenues[j])!;
         
         const venue1Schedule = getVenueSchedule(venue1Data)[dayInt];
         const venue2Schedule = getVenueSchedule(venue2Data)[dayInt];
@@ -476,16 +491,93 @@ async function main() {
         console.log(`${venue1Data.venue_info.venue_name} hours: ${venue1Schedule.opens}:00 - ${venue1Schedule.closes}:00`);
         console.log(`${venue2Data.venue_info.venue_name} hours: ${venue2Schedule.opens}:00 - ${venue2Schedule.closes}:00`);
 
-        const pairRoutes = await calculateRoutesForVenuePair(
-          venue1Data,
-          venue2Data,
-          venue1Schedule,
-          venue2Schedule,
-          venue1DwellHours,
-          venue2DwellHours,
-          dayText,
-          existingRouteMap
-        );
+        let pairRoutes: RouteData[] = [];
+        
+        // Check if we should use Monday's data
+        const useMonday = (mondayOnlyVenues.includes(allVenues[i]) ||
+                          mondayOnlyVenues.includes(allVenues[j])) &&
+                          dayText !== 'Monday';
+                          
+        // Check if we should use Tuesday's data for ROM
+        const useTuesday = (tuesdayOnlyVenues.includes(allVenues[i]) ||
+                           tuesdayOnlyVenues.includes(allVenues[j])) &&
+                           dayText !== 'Tuesday';
+        
+        // ROM is involved and it's Monday - skip this pair as ROM is closed on Mondays
+        const isROMOnMonday = (tuesdayOnlyVenues.includes(allVenues[i]) || 
+                              tuesdayOnlyVenues.includes(allVenues[j])) && 
+                              dayText === 'Monday';
+        
+        if (isROMOnMonday) {
+          console.log(`Skipping routes for ${venue1Data.venue_info.venue_name} and ${venue2Data.venue_info.venue_name} on Monday as ROM is closed`);
+          continue;
+        } else if (useTuesday) {
+          // For non-Tuesday days, try to get cached Tuesday routes for ROM
+          const cacheKey = `${venue1Data.venue_info.venue_name}-${venue2Data.venue_info.venue_name}`;
+          const tuesdayRoutes = tuesdayROMRouteCache.get(cacheKey);
+          
+          if (tuesdayRoutes) {
+            // Reuse Tuesday's routes with updated day
+            pairRoutes = tuesdayRoutes.map(route => ({
+              ...route,
+              day: dayText
+            }));
+            console.log(`Reusing Tuesday's routes for ${cacheKey} on ${dayText}`);
+          } else if (dayText !== 'Monday') {
+            // If we don't have cached Tuesday routes and it's not Monday, calculate new routes
+            pairRoutes = await calculateRoutesForVenuePair(
+              venue1Data,
+              venue2Data,
+              venue1Schedule,
+              venue2Schedule,
+              venue1DwellHours,
+              venue2DwellHours,
+              dayText,
+              existingRouteMap
+            );
+          }
+        } else if (useMonday) {
+          // For non-Monday days, try to get cached Monday routes
+          const cacheKey = `${venue1Data.venue_info.venue_name}-${venue2Data.venue_info.venue_name}`;
+          const mondayRoutes = mondayRouteCache.get(cacheKey);
+          
+          if (mondayRoutes) {
+            // Reuse Monday's routes with updated day
+            pairRoutes = mondayRoutes.map(route => ({
+              ...route,
+              day: dayText
+            }));
+            console.log(`Reusing Monday's routes for ${cacheKey} on ${dayText}`);
+          } else {
+            console.log(`No cached Monday routes found for ${cacheKey}, skipping for ${dayText}`);
+          }
+        } else {
+          // Calculate new routes
+          pairRoutes = await calculateRoutesForVenuePair(
+            venue1Data,
+            venue2Data,
+            venue1Schedule,
+            venue2Schedule,
+            venue1DwellHours,
+            venue2DwellHours,
+            dayText,
+            existingRouteMap
+          );
+
+          // If it's Monday, cache the routes for later reuse
+          if (dayText === 'Monday') {
+            const cacheKey = `${venue1Data.venue_info.venue_name}-${venue2Data.venue_info.venue_name}`;
+            mondayRouteCache.set(cacheKey, pairRoutes);
+            console.log(`Cached Monday routes for ${cacheKey}`);
+          }
+          
+          // If it's Tuesday and ROM is involved, cache the routes for later reuse
+          if (dayText === 'Tuesday' && (tuesdayOnlyVenues.includes(allVenues[i]) || tuesdayOnlyVenues.includes(allVenues[j]))) {
+            const cacheKey = `${venue1Data.venue_info.venue_name}-${venue2Data.venue_info.venue_name}`;
+            tuesdayROMRouteCache.set(cacheKey, pairRoutes);
+            console.log(`Cached Tuesday routes for ${cacheKey} (ROM)`);
+          }
+        }
 
         newRoutes.push(...pairRoutes);
         allRoutes.push(...pairRoutes);
