@@ -22,6 +22,7 @@
       - [Model Architecture Diagram](#model-architecture-diagram)
       - [Testing the Model](#testing-the-model)
       - [Sample Optimization Run](#sample-optimization-run)
+      - [Pareto Optimality Analysis](#pareto-optimality-analysis)
     - [Viewing Claude Desktop MCP Logs](#viewing-claude-desktop-mcp-logs)
     - [Scripts Overview](#scripts-overview)
       - [`fetchTimedRoutes.ts`](#fetchtimedroutests)
@@ -334,6 +335,43 @@ The optimizer has created an efficient schedule that:
 6. Allows sufficient time for travel between venues
 
 Crowd levels are on a scale from -2 (very quiet) to +2 (very busy), with 0 representing average crowds.
+
+#### Pareto Optimality Analysis
+
+The Pareto Optimality Analysis helps understand the trade-offs between competing objectives in the tour optimization problem:
+
+1. Minimizing total travel time between venues
+2. Minimizing exposure to crowds at venues
+3. Maximizing the number of venues visited
+
+The analysis generates multiple solutions by systematically varying the weights in the objective function and identifies the Pareto-optimal (non-dominated) solutions. A solution is Pareto-optimal if no other solution is better in all objectives.
+
+**Running the Analysis:**
+
+```bash
+# Run with default settings (Tuesday, 5 points per weight)
+python -m src.cpm.run_pareto_analysis
+
+# Run with custom settings
+python -m src.cpm.run_pareto_analysis --day Friday --points 3 --output pareto_results_friday
+```
+
+**Outputs:**
+
+- 3D visualization of the Pareto front showing the trade-offs between all three objectives
+- 2D visualizations showing pairwise trade-offs between objectives
+- CSV file with all solutions and their metrics
+
+**Interpreting the Results:**
+
+The Pareto front represents the set of solutions where improving one objective necessarily degrades at least one other objective. This analysis helps decision-makers understand the trade-offs and choose a solution that best matches their preferences.
+
+For example, if minimizing crowd exposure is more important than visiting many venues, a solution from the appropriate region of the Pareto front can be selected.
+
+**Implementation Details:**
+
+- `src/cpm/pareto_analysis.py`: Core implementation of the Pareto analysis
+- `src/cpm/run_pareto_analysis.py`: Command-line interface for running the analysis
 
 ### Viewing Claude Desktop MCP Logs
 

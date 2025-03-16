@@ -69,6 +69,9 @@ class TourOptimizer:
         t: Array of IntVar for start time slots
         p: Array of IntVar for positions
         x: Array of BoolVar for venue selection
+        w_travel: Weight for travel time
+        w_crowd: Weight for crowd levels
+        w_venues: Weight for number of venues
     """
     
     def __init__(
@@ -98,12 +101,12 @@ class TourOptimizer:
             travel_times: Dictionary mapping (from_venue, to_venue, time, day) 
                 to travel time in minutes
             crowd_levels: Dictionary mapping (venue, time_slot, day) to 
-                crowd level
-            venue_open_slots: Dict mapping (venue, day) to list of valid 
-                time slots
+                crowd level (0-100)
+            venue_open_slots: Dictionary mapping (venue, day) to list of valid
+                time slot indices (optional)
             tour_start_time: Earliest time the tour can start (HH:MM)
             tour_end_time: Latest time the tour must end (HH:MM)
-            day: Day of the week for this tour
+            day: Day of the week for the tour
         """
         self.venues = venues
         self.n_venues = len(venues)
@@ -113,6 +116,16 @@ class TourOptimizer:
         self.travel_times = travel_times
         self.crowd_levels = crowd_levels
         self.day = day
+        
+        # Set objective function weights with default values
+        self.w_travel = 1.0     # Weight for travel time
+        self.w_crowd = 0.5      # Weight for crowd levels
+        self.w_venues = -20.0   # Weight for number of venues (negative to maximize)
+        
+        # Convert dwell times from hours to number of 30-min slots
+        self.dwell_slots = {}
+        for venue, hours in dwell_times.items():
+            self.dwell_slots[venue] = max(1, int(hours * 2))  # 2 slots per hour
         
         # Convert venue_open_slots to use day-specific slots
         if venue_open_slots:
@@ -127,12 +140,6 @@ class TourOptimizer:
         # Convert tour time window to slot indices
         self.tour_start_slot = time_slots.index(tour_start_time)
         self.tour_end_slot = time_slots.index(tour_end_time)
-        
-        # Convert dwell times to number of 30-min slots
-        self.dwell_slots = {
-            venue: int(hours * 2)  # 2 slots per hour
-            for venue, hours in dwell_times.items()
-        }
         
         # Initialize the model
         self.model = Model()
@@ -480,9 +487,7 @@ class TourOptimizer:
         
         # Combine objectives with weights
         # Note: Convert n_visited to negative since we're minimizing
-        w_travel = 1.0     # Weight for travel time
-        w_crowd = 0.5      # Weight for crowd levels
-        w_venues = -20.0   # Weight for number of venues (negative to maximize)
+        # Use the instance attributes for weights instead of hardcoded values
         
         # Normalize the components to similar scales
         # Assuming:
@@ -494,9 +499,9 @@ class TourOptimizer:
         normalized_venues = n_visited / self.n_venues  # Normalize by total possible venues
         
         objective = (
-            w_travel * normalized_travel +
-            w_crowd * normalized_crowd +
-            w_venues * normalized_venues
+            self.w_travel * normalized_travel +
+            self.w_crowd * normalized_crowd +
+            self.w_venues * normalized_venues
         )
         
         self.model.minimize(objective)

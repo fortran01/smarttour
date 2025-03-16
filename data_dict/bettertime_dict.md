@@ -100,4 +100,4 @@ The `hour_analysis` array contains 24 entries (one per hour) with:
 - Times are typically in 24-hour format unless specified otherwise
 - Crowd levels are normalized on a 0-100 scale
 - The API uses 999 as a special value to indicate closed hours
-- Intensity levels range from -2 (very low) to 2 (very high)
+- Intensity levels range from -2 (very low) to 2 (very high), with 0 being average
