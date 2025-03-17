@@ -211,12 +211,9 @@ def main():
     
     # Set custom objective weights to strongly favor multiple venues
     # Keep travel and crowd weights low to prioritize venue count
-    # travel_weight = 0.05   # Reduced weight for travel time
-    travel_weight = 0.4
-    # crowd_weight = 0.05    # Reduced weight for crowds
-    crowd_weight = 0.4
-    # venues_weight = -5000  # Much stronger weight to maximize venues
-    venues_weight = -1
+    travel_weight = 0.05   # Reduced weight for travel time
+    crowd_weight = 0.05    # Reduced weight for crowds
+    venues_weight = -5000  # Much stronger weight to maximize venues
     
     # Analyze objective weights
     analyze_objective_weights(
