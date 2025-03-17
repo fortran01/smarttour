@@ -209,10 +209,14 @@ def main():
         args.day
     )
     
-    # Set custom objective weights
-    travel_weight = 0.1  # Set to 0 to ignore travel time
-    crowd_weight = 0.1
-    venues_weight = -2000  # Increased to strongly encourage multiple venues
+    # Set custom objective weights to strongly favor multiple venues
+    # Keep travel and crowd weights low to prioritize venue count
+    # travel_weight = 0.05   # Reduced weight for travel time
+    travel_weight = 0.4
+    # crowd_weight = 0.05    # Reduced weight for crowds
+    crowd_weight = 0.4
+    # venues_weight = -5000  # Much stronger weight to maximize venues
+    venues_weight = -1
     
     # Analyze objective weights
     analyze_objective_weights(
@@ -251,10 +255,11 @@ def main():
         day=args.day  # Use the day from command line arguments
     )
     
-    # Set minimum number of venues to visit
-    optimizer.set_min_venues(3)
+    # Set aggressive minimum venues target with optimized solver
+    min_venues = 3 if args.day == "Monday" else 4
+    optimizer.set_min_venues(min_venues)
 
-    # Set custom objective weights
+    # Set custom objective weights with strong preference for multiple venues
     optimizer.set_objective_weights(
         travel_weight=travel_weight,
         crowd_weight=crowd_weight,

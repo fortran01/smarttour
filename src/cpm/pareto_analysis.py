@@ -40,7 +40,7 @@ def generate_weight_combinations(
     positive_weights = np.linspace(0.1, 1.0, n_points)
 
     # We use negative weights because we want to maximize venues
-    negative_weights = np.linspace(-1, -20, n_points)
+    negative_weights = np.linspace(-1, -40, n_points)
     
     # Generate all combinations of weights
     combinations = []
@@ -254,7 +254,7 @@ def run_model_with_weights(
     )
     
     # Set minimum number of venues to visit
-    optimizer.set_min_venues(3)
+    optimizer.set_min_venues(3 if day == "Monday" else 4)
     
     # Set custom weights for the objective function
     # Note: w_venues is already negative to maximize venues

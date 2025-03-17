@@ -266,6 +266,12 @@ class TourOptimizer:
         # First, count how many venues are selected
         n_selected = sum(self.x)
         
+        # Store the count as an instance variable for use elsewhere
+        self.n_selected = n_selected
+        
+        # Log the count
+        logger.info(f"Number of selected venues: {n_selected}")
+        
         # Allow the optimizer to select at least min_venues venues
         self.model += n_selected >= self.min_venues
         
@@ -419,9 +425,9 @@ class TourOptimizer:
         3. Number of venues visited (negative to maximize)
         
         Components are normalized to similar scales:
-        - Travel time divided by 30 (assuming ~30 min average)
-        - Crowd levels divided by 100 (0-100 scale)
-        - Number of venues used directly with negative weight
+        - Travel time divided by max possible travel time
+        - Crowd levels divided by max possible crowd level
+        - Number of venues divided by total venues
         """
         # 1. Calculate total travel time between consecutive venues
         total_travel_time = 0
@@ -454,6 +460,7 @@ class TourOptimizer:
         
         # 2. Calculate total crowd exposure during visits
         total_crowd_level = 0
+        max_crowd_level = 100  # Crowd levels are 0-100
         for i, venue in enumerate(self.venues):
             # For each selected venue
             if self.x[i]:
@@ -478,24 +485,22 @@ class TourOptimizer:
         # 3. Count number of venues visited (to maximize)
         n_visited = sum(self.x)
         
-        # Combine objectives with weights
-        # Note: Convert n_visited to negative since we're minimizing
-        # Use the instance attributes for weights instead of hardcoded values
-        
-        # Normalize the components to similar scales
-        # Assuming:
-        # - Average travel time is 30 mins
-        # - Crowd level is 0-100 scale
-        # - Number of venues is normalized by max possible venues
-        normalized_travel = total_travel_time / 30
-        normalized_crowd = total_crowd_level / 100
-        normalized_venues = (n_visited / self.n_venues)  # Normalize by total possible venues
-        
-        objective = (
-            self.w_travel * normalized_travel +
-            self.w_crowd * normalized_crowd +
-            self.w_venues * normalized_venues
+        # Calculate maximum possible travel time for normalization
+        max_travel_time = max(
+            [time for time in self.travel_times.values()],
+            default=1  # Default to 1 if no travel times
         )
+        
+        # Normalize components (avoid division by zero)
+        normalized_travel = total_travel_time / max(1, max_travel_time)
+        normalized_crowd = total_crowd_level / max(1, max_crowd_level * self.n_venues * self.n_slots)
+        normalized_venues = n_visited / max(1, self.n_venues)
+        
+        # Combine objectives with weights
+        objective = 0
+        objective += self.w_travel * normalized_travel   # Minimize travel time
+        objective += self.w_crowd * normalized_crowd     # Minimize crowd levels
+        objective += self.w_venues * normalized_venues   # Maximize venues
         
         self.model.minimize(objective)
     
@@ -514,23 +519,33 @@ class TourOptimizer:
             - schedule: List of dicts with detailed timing
             Returns None if no solution is found.
         """
-        # Create the solver instance with our model
-        self.solver = CPM_ortools(self.model)
+        logger = logging.getLogger(__name__)
+        logger.info("Starting optimization...")
         
-        # Set solver parameters for multi-threading and time limit
-        if self.solver.solve(num_search_workers=num_cores, 
-                        time_limit=time_limit):
-            return self._format_solution()
-        return None
+        try:
+            # Create a new solver instance
+            solver = CPM_ortools(self.model)
+            
+            # Attempt to solve the model
+            if solver.solve():
+                logger.info("Solution found successfully")
+                return self._format_solution()
+            else:
+                logger.warning("No solution found within constraints")
+                return None
+                
+        except Exception as e:
+            logger.error(f"Error during optimization: {str(e)}")
+            return None
     
     def _format_solution(self) -> Dict:
         """Format the solution into a readable dictionary."""
         logger = logging.getLogger(__name__)
         
-        # Get solution values
-        x_val = [bool(self.x[i].value()) for i in range(self.n_venues)]
-        t_val = [int(self.t[i].value()) for i in range(self.n_venues)]
-        p_val = [int(self.p[i].value()) for i in range(self.n_venues)]
+        # Get solution values - use the value() method on the variables
+        x_val = [bool(x.value()) for x in self.x]
+        t_val = [int(t.value()) for t in self.t]
+        p_val = [int(p.value()) for p in self.p]
         
         # Create ordered list of selected venues
         selected_indices = [i for i in range(self.n_venues) if x_val[i]]
